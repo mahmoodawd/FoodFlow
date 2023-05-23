@@ -2,4 +2,7 @@
     <string name="app_name">FoodFlow</string>
     <string name="foodflow">FoodFlow</string>
     <string name="slogan">Unlock your kitchen\'s potential</string>
+    <string name="title_activity_splahscreen">SplahscreenActivity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
 </resources>

@@ -11,6 +11,7 @@
     <color name="theme_light_onPrimary">#FFFFFF</color>
     <color name="theme_light_primaryContainer">#7DFBA4</color>
     <color name="theme_light_onPrimaryContainer">#00210C</color>
+    <color name="theme_light_primaryVariant">#00210C</color>
     <color name="theme_light_secondary">#FE813A</color>
     <color name="theme_light_onSecondary">#FFFFFF</color>
     <color name="theme_light_secondaryContainer">#FFDBCB</color>
@@ -67,4 +68,9 @@
     <color name="theme_dark_surfaceTint">#5FDE8A</color>
     <color name="theme_dark_outlineVariant">#414941</color>
     <color name="theme_dark_scrim">#000000</color>
+    <color name="light_blue_600">#FF039BE5</color>
+    <color name="light_blue_900">#FF01579B</color>
+    <color name="light_blue_A200">#FF40C4FF</color>
+    <color name="light_blue_A400">#FF00B0FF</color>
+    <color name="black_overlay">#66000000</color>
 </resources>
