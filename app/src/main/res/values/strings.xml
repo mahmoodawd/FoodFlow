@@ -1,8 +1,17 @@
 <resources>
     <string name="app_name">FoodFlow</string>
-    <string name="foodflow">FoodFlow</string>
     <string name="slogan">Unlock your kitchen\'s potential</string>
-    <string name="title_activity_splahscreen">SplahscreenActivity</string>
-    <string name="dummy_button">Dummy Button</string>
-    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="title_activity_splash_screen">SplashScreenActivity</string>
+
+    <string name="welcomeMsg">Go as a guest to browse meals, or Join our app  and get full features</string>
+    <string name="welcomeQuestion">Ready For cooking?</string>
+    <string name="join">Join</string>
+    <string name="guest">Go as a Guest</string>
+    <string name="signup">Sign Up</string>
+    <string name="login">Login</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="emailHint">Ex. Mahmoud Awad</string>
+    <string name="passwordConfirm">Confirm Password</string>
+    <string name="google">Sign Up with Google</string>
 </resources>
