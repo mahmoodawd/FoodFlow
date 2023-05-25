@@ -9,8 +9,8 @@ import android.os.Bundle;
 import com.example.foodflow.R;
 import com.example.foodflow.db.ConcreteLocalSource;
 import com.example.foodflow.home.presenter.HomePresenter;
-import com.example.foodflow.model.Meal;
-import com.example.foodflow.model.Repository;
+import com.example.foodflow.models.Meal;
+import com.example.foodflow.repositories.Repository;
 import com.example.foodflow.network.API_Client;
 
 import java.util.ArrayList;
@@ -33,7 +33,7 @@ public class HomeActivity extends AppCompatActivity implements HomeViewInterface
         mealsRecyclerView.setHasFixedSize(true);
         mealsRecyclerView.setLayoutManager(layoutManager);
         mealsRecyclerView.setAdapter(mealsAdapter);
-        homePresenter.getMeals();
+        homePresenter.getMealOfTheDay();
     }
 
     @Override

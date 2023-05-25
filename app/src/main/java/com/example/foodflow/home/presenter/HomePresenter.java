@@ -1,8 +1,8 @@
 package com.example.foodflow.home.presenter;
 
 import com.example.foodflow.home.view.HomeViewInterface;
-import com.example.foodflow.model.Meal;
-import com.example.foodflow.model.RepositoryInterface;
+import com.example.foodflow.models.Meal;
+import com.example.foodflow.repositories.RepositoryInterface;
 import com.example.foodflow.network.NetworkDelegate;
 
 import java.util.List;
@@ -17,8 +17,8 @@ public class HomePresenter implements HomePresenterInterface, NetworkDelegate {
     }
 
     @Override
-    public void getMeals() {
-        _repo.getMeals(this);
+    public void getMealOfTheDay() {
+        _repo.getMealOfTheDay(this);
     }
 
     @Override
@@ -27,7 +27,7 @@ public class HomePresenter implements HomePresenterInterface, NetworkDelegate {
     }
 
     @Override
-    public void onSuccess(List<Meal> mealList) {
+    public void onSuccess(List mealList) {
         _view.displayMeals(mealList);
     }
 
