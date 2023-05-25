@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">FoodFlow</string>
     <string name="slogan">Unlock your kitchen\'s potential</string>
+
     <string name="title_activity_splash_screen">SplashScreenActivity</string>
 
     <string name="welcomeMsg">Go as a guest to browse meals, or Join our app  and get full features</string>
@@ -14,7 +15,6 @@
     <string name="emailHint">username@provider.com</string>
     <string name="passwordConfirm">Confirm Password</string>
     <string name="google">Sign Up with Google</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="navToLogin">Already have an account? Login</string>
     <string name="navToSignUp">Don\'t have an account, SignUp</string>
