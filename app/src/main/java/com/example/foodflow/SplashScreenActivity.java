@@ -9,6 +9,7 @@ import android.widget.ImageView;
 
 import com.airbnb.lottie.LottieAnimationView;
 
+
 public class SplashScreenActivity extends AppCompatActivity {
     LottieAnimationView lottieAnimationView;
     ImageView nameSlogan;

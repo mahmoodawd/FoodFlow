@@ -12,8 +12,13 @@
     <string name="login">Login</string>
     <string name="email">Email</string>
     <string name="password">Password</string>
-    <string name="emailHint">Ex. Mahmoud Awad</string>
+    <string name="emailHint">username@provider.com</string>
     <string name="passwordConfirm">Confirm Password</string>
     <string name="google">Sign Up with Google</string>
-
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="navToLogin">Already have an account? Login</string>
+    <string name="navToSignUp">Don\'t have an account, SignUp</string>
+    <string name="title">Meal title</string>
+    <string name="area">MealArea</string>
+    <string name="mealOfTheDay">Meal Of The Day</string>
 </resources>
