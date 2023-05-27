@@ -2,7 +2,6 @@ package com.example.foodflow.network;
 
 
 import com.example.foodflow.models.CategoriesResponse;
-import com.example.foodflow.models.MealsDetailsResponse;
 import com.example.foodflow.models.MealsResponse;
 
 import retrofit2.Call;
@@ -18,7 +17,7 @@ public interface API_Service {
     Call<MealsResponse> getSearchedMeals(@Query("s") String meal);
 
     @GET("lookup.php")
-    Call<MealsDetailsResponse> getMealDetails(@Query("i") String mealId);
+    Call<MealsResponse> getMealDetails(@Query("i") String mealId);
 
     @GET("categories.php")
     Call<CategoriesResponse> getCategories();
