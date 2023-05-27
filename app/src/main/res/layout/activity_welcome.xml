@@ -8,10 +8,11 @@
 
     <TextView
         android:id="@+id/titleTextView"
-        style="@style/heading1"
+        style="@style/TextAppearance.MaterialComponents.Headline2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
+        android:fontFamily="@font/poppins"
         android:padding="20dp"
         android:text="@string/app_name"
         android:textStyle="bold"
@@ -32,10 +33,11 @@
 
     <TextView
         android:id="@+id/questionTextView"
-        style="@style/heading4"
+        style="@style/TextAppearance.MaterialComponents.Headline4"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="176dp"
+        android:fontFamily="@font/poppins"
         android:lineSpacingExtra="7sp"
         android:text="@string/welcomeQuestion"
         android:textAlignment="center"
@@ -46,35 +48,45 @@
 
     <TextView
         android:id="@+id/welcomeMsgTextView"
-        style="@style/heading6"
+        style="@style/TextAppearance.MaterialComponents.Subtitle1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="104dp"
+        android:layout_margin="16dp"
+        android:padding="16dp"
         android:text="@string/welcomeMsg"
         android:textAlignment="center"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/titleTextView" />
+        app:layout_constraintTop_toBottomOf="@+id/questionTextView" />
 
     <Button
+
         android:id="@+id/joinButton"
         style="@style/activeBtnStyle"
         android:layout_marginTop="36dp"
+        android:fontFamily="@font/poppins"
+        android:includeFontPadding="false"
         android:text="@string/join"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/welcomeMsgTextView" />
 
     <Button
-        android:id="@+id/guestButton"
-        style="@style/inActiveBtnStyle"
 
-        android:layout_marginTop="20dp"
+        android:id="@+id/guestButton"
+        style="@style/Widget.Material3.Button.TonalButton"
+        android:layout_width="match_parent"
+        android:layout_height="75dp"
+        android:layout_margin="16dp"
+        android:layout_marginTop="28dp"
+        android:fontFamily="@font/poppins"
         android:text="@string/guest"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.458"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/joinButton" />
 
