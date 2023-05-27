@@ -6,13 +6,13 @@ import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
-import com.example.foodflow.model.Meal;
+import com.example.foodflow.models.Meal;
 
 @Database(entities = {Meal.class}, version = 1)
 public abstract class FavoritesDB extends RoomDatabase {
     private static FavoritesDB instance = null;
 
-    public abstract MealDoa productDoa();
+    public abstract MealDoa mealDao();
 
     public static synchronized FavoritesDB getInstance(Context context) {
         if (instance == null) {

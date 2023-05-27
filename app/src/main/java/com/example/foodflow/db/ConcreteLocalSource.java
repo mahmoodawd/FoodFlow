@@ -4,62 +4,57 @@ import android.content.Context;
 
 import androidx.lifecycle.LiveData;
 
-import com.example.foodflow.model.Meal;
+import com.example.foodflow.models.Meal;
 
 import java.util.List;
 
 public class ConcreteLocalSource implements LocalSource {
     private Context context;
-    MealDoa MealDoa;
-    LiveData<List<Meal>> StoredMeals;
-    LiveData<List<Meal>> targetMeal;
+    MealDoa mealDoa;
+    LiveData<List<Meal>> storedMeals;
     private static ConcreteLocalSource instance = null;
 
 
     private ConcreteLocalSource(Context context) {
         this.context = context;
         FavoritesDB db = FavoritesDB.getInstance(context.getApplicationContext());
-//        MealDoa = db.MealDoa();
-//        StoredMeals = MealDoa.();
+        mealDoa = db.mealDao();
+        storedMeals = mealDoa.getStoredMeals();
+
     }
 
-    public static ConcreteLocalSource getInstance(Context context){
-        if(instance == null){
+    public static ConcreteLocalSource getInstance(Context context) {
+        if (instance == null) {
             instance = new ConcreteLocalSource(context);
         }
         return instance;
     }
 
-//    @Override
-//    public LiveData<List<Meal>> getStoredMeals() {
-//        return StoredMeals;
-//    }
+    @Override
+    public LiveData<List<Meal>> getStoredMeals() {
+        return storedMeals;
+    }
 
-//    @Override
-//    public LiveData<List<Meal>> searchMeal(String MealName) {
-//        return targetMeal;
-//    }
-//
-//    @Override
-//    public void insert(Meal Meal) {
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                MealDoa.insertAll(Meal);
-//            }
-//        }).start();
-//    }
-//
-//    @Override
-//    public void delete(Meal Meal) {
-//
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                MealDoa.delete(Meal);
-//            }
-//        }).start();
-//    }
+    @Override
+    public void insert(Meal Meal) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                mealDoa.insertAll(Meal);
+            }
+        }).start();
+    }
+
+    @Override
+    public void delete(Meal Meal) {
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                mealDoa.delete(Meal);
+            }
+        }).start();
+    }
 
 
 }
