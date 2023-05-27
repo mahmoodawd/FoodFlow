@@ -1,7 +1,12 @@
 package com.example.foodflow.repositories;
 
 
+import androidx.lifecycle.LiveData;
+
+import com.example.foodflow.models.Meal;
 import com.example.foodflow.network.NetworkDelegate;
+
+import java.util.List;
 
 
 public interface RepositoryInterface {
@@ -18,5 +23,11 @@ public interface RepositoryInterface {
     void getMealsByArea(NetworkDelegate callback, String area);
 
     void getMealsByIngredient(NetworkDelegate callback, String ingredient);
+
+    LiveData<List<Meal>> getFavoritesMeals();
+
+    void insert(Meal meal);
+
+    void delete(Meal meal);
 
 }

@@ -1,10 +1,16 @@
 package com.example.foodflow.repositories;
 
 import android.content.Context;
+import android.util.Log;
+
+import androidx.lifecycle.LiveData;
 
 import com.example.foodflow.db.ConcreteLocalSource;
+import com.example.foodflow.models.Meal;
 import com.example.foodflow.network.NetworkDelegate;
 import com.example.foodflow.network.RemoteSource;
+
+import java.util.List;
 
 public class Repository implements RepositoryInterface {
     private Context context;
@@ -60,5 +66,20 @@ public class Repository implements RepositoryInterface {
     @Override
     public void getMealsByIngredient(NetworkDelegate networkDelegate, String ingredient) {
         remoteSource.getMealsByIngredient(networkDelegate, ingredient);
+    }
+
+    @Override
+    public LiveData<List<Meal>> getFavoritesMeals() {
+        return concreteLocalSource.getStoredMeals();
+    }
+
+    @Override
+    public void insert(Meal meal) {
+        concreteLocalSource.insert(meal);
+    }
+
+    @Override
+    public void delete(Meal meal) {
+        concreteLocalSource.delete(meal);
     }
 }
