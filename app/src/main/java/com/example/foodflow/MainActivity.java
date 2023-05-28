@@ -11,6 +11,10 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity {
 
     private BottomNavigationView bottomNavigationView;
@@ -22,13 +26,16 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         bottomNavigationView = findViewById(R.id.bottom_navigation);
 
+        List<Integer> bottomNavigationChildren = new ArrayList<>(Arrays.asList(R.id.homeFragment, R.id.searchFragment, R.id.favoritesFragment, R.id.plannerFragment));
         NavHostFragment navHostFragment =
                 (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
         navController = navHostFragment.getNavController();
         navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
-            if (destination.getId() == R.id.mealDetailsFragment) {
+            if (bottomNavigationChildren.contains(destination.getId())) {
+                bottomNavigationView.setVisibility(View.VISIBLE);
+            } else {
                 bottomNavigationView.setVisibility(View.GONE);
-            } else bottomNavigationView.setVisibility(View.VISIBLE);
+            }
         });
         NavigationUI.setupWithNavController(bottomNavigationView, navController);
     }

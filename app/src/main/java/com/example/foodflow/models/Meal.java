@@ -3,8 +3,15 @@ package com.example.foodflow.models;
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
+import com.example.foodflow.R;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -71,6 +78,9 @@ public class Meal {
     private String strMeasure17;
     private String strMeasure14;
     private String strMeasure15;
+
+
+
     public void setIdMeal(@NonNull String idMeal) {
         this.idMeal = idMeal;
     }
@@ -507,5 +517,9 @@ public class Meal {
         }
         return videoId;
     }
+
+
+
+
 
 }

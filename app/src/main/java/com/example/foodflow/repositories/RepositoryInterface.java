@@ -13,6 +13,9 @@ public interface RepositoryInterface {
     void getMealOfTheDay(NetworkDelegate callback);
 
     void getCategories(NetworkDelegate callback);
+    void getAreas(NetworkDelegate callback);
+    void getIngredients(NetworkDelegate callback);
+
 
     void getMealDetails(NetworkDelegate callback, String mealId);
 

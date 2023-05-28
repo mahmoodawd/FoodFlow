@@ -13,9 +13,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.foodflow.MainActivity;
 import com.example.foodflow.R;
-import com.example.foodflow.home.view.HomeActivity;
+import com.example.foodflow.MainActivity;
 import com.google.android.gms.auth.api.identity.BeginSignInRequest;
 import com.google.android.gms.auth.api.identity.SignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -85,7 +84,7 @@ public class RegisterActivity extends AppCompatActivity {
                     Log.d(TAG, "createUserWithEmail:success");
                     FirebaseUser user = mAuth.getCurrentUser();
                     Toast.makeText(RegisterActivity.this, "U R Welcome.", Toast.LENGTH_SHORT).show();
-                    navigate(HomeActivity.class);
+                    navigate(MainActivity.class);
                 } else {
                     // If sign in fails, display a message to the user.
                     Log.w(TAG, "createUserWithEmail:failure", task.getException());
@@ -124,7 +123,7 @@ public class RegisterActivity extends AppCompatActivity {
                             Log.d(TAG, "signInWithCredential:success");
 
                             // Sign in success, navigate user to Profile Activity
-                            navigate(HomeActivity.class);
+                            navigate(MainActivity.class);
                         } else {
                             // If sign in fails, display a message to the user.
                             Toast.makeText(RegisterActivity.this, "User authentication failed", Toast.LENGTH_SHORT).show();
@@ -138,7 +137,7 @@ public class RegisterActivity extends AppCompatActivity {
         super.onStart();
         FirebaseUser user = mAuth.getCurrentUser();
         if (user != null) {
-            startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+            startActivity(new Intent(getApplicationContext(), MainActivity.class));
         }
     }
 

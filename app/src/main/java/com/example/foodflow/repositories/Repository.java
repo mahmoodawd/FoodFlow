@@ -44,6 +44,16 @@ public class Repository implements RepositoryInterface {
     }
 
     @Override
+    public void getAreas(NetworkDelegate callback) {
+        remoteSource.getAreas(callback);
+    }
+
+    @Override
+    public void getIngredients(NetworkDelegate callback) {
+        remoteSource.getIngredients(callback);
+    }
+
+    @Override
     public void getMealDetails(NetworkDelegate networkDelegate, String mealId) {
         remoteSource.getMealDetails(networkDelegate, mealId);
     }

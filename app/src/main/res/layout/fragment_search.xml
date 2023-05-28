@@ -8,11 +8,37 @@
     android:orientation="vertical"
     tools:context=".search.view.SearchFragment">
 
-    <com.google.android.material.search.SearchBar
-        android:id="@+id/search_bar"
+<!--    <com.google.android.material.search.SearchBar-->
+<!--        android:id="@+id/search_bar"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:hint="@string/searchbar_hint" />-->
+
+    <androidx.appcompat.widget.SearchView
+        android:id="@+id/searchView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:hint="@string/searchbar_hint"
+        app:layout_anchor="@id/search_bar"/>
+    <TextView
+        android:id="@+id/searchResultTV"
+        style="@style/TextAppearance.Material3.HeadlineSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="0dp"
+        android:lineSpacingExtra="5sp"
+        android:padding="10dp"
+        android:text="@string/searchResult" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/searchResultRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/searchbar_hint" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:listitem="@layout/meal_layout" />
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -25,6 +51,7 @@
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/ingredientTV"
                 style="@style/TextAppearance.Material3.HeadlineMedium"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -35,7 +62,7 @@
 
 
             <TextView
-
+                android:id="@+id/areaTV"
                 style="@style/TextAppearance.Material3.HeadlineMedium"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -45,7 +72,7 @@
                 android:text="@string/searchByArea" />
 
             <TextView
-
+                android:id="@+id/categoryTV"
                 style="@style/TextAppearance.Material3.HeadlineMedium"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -54,27 +81,12 @@
                 android:padding="10dp"
                 android:text="@string/searchByCategory" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/categoriesRecyclerView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:listitem="@layout/category_layout" />
-
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
-    <com.google.android.material.search.SearchView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/searchbar_hint"
-        app:layout_anchor="@id/search_bar">
-        <!-- Search suggestions/results go here (ScrollView, RecyclerView, etc.). -->
-    </com.google.android.material.search.SearchView>
+
+
 
 
 </LinearLayout>

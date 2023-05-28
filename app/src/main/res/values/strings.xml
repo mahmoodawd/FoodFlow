@@ -31,8 +31,9 @@
     <string name="instructionsDetails">A detailed explaination of how to make this meal should appear here, pla pla pla</string>
     <string name="fab_content_desc">Add Meal To Favorites</string>
     <string name="add2Favs">Add to favorites</string>
-    <string name="searchByIngredient">Seaarch By Ingredient</string>
+    <string name="searchByIngredient">Search By Ingredient</string>
     <string name="searchByArea">Search With Area</string>
     <string name="searchByCategory">Explore Categories</string>
     <string name="searchbar_hint">Search Meals</string>
+    <string name="searchResult">Search Result</string>
 </resources>

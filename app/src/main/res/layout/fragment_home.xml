@@ -27,4 +27,15 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:listitem="@layout/meal_layout" />
 
+    <com.google.android.material.progressindicator.CircularProgressIndicator
+        android:id="@+id/loadingIndicator"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:padding="32dp"
+        android:layout_margin="32dp"
+
+        android:indeterminate="true" />
+
+
 </LinearLayout>
