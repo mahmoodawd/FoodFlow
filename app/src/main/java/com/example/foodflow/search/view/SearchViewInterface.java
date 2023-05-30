@@ -8,7 +8,7 @@ import com.example.foodflow.models.Meal;
 import java.util.List;
 
 public interface SearchViewInterface {
-    void showSearchResult(List<Meal> searchedMeals);
+    void showSearchResult(List<Object> searchedMeals);
 
 
 

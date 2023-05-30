@@ -1,6 +1,8 @@
 package com.example.foodflow.network;
 
 public interface RemoteSource {
+    void getAllMeals(NetworkDelegate networkDelegate);
+
     void getMealOfTheDay(NetworkDelegate networkDelegate);
 
     void getMealDetails(NetworkDelegate networkDelegate, String mealId);

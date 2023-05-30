@@ -1,93 +1,89 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    tools:context=".search.view.SearchFragment">
-
-<!--    <com.google.android.material.search.SearchBar-->
-<!--        android:id="@+id/search_bar"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:hint="@string/searchbar_hint" />-->
-
-    <androidx.appcompat.widget.SearchView
-        android:id="@+id/searchView"
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:hint="@string/searchbar_hint"
-        app:layout_anchor="@id/search_bar"/>
-    <TextView
-        android:id="@+id/searchResultTV"
-        style="@style/TextAppearance.Material3.HeadlineSmall"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="0dp"
-        android:lineSpacingExtra="5sp"
-        android:padding="10dp"
-        android:text="@string/searchResult" />
+        android:orientation="vertical"
+        tools:context=".search.view.SearchFragment">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/searchResultRecyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:listitem="@layout/meal_layout" />
+    <!--    <com.google.android.material.search.SearchBar-->
+    <!--        android:id="@+id/search_bar"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:hint="@string/searchbar_hint" />-->
 
-    <androidx.core.widget.NestedScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="@string/searchbar_scrolling_view_behavior">
-
-        <LinearLayout
+        <androidx.appcompat.widget.SearchView
+            android:id="@+id/searchView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:hint="@string/searchbar_hint"
+            app:layout_anchor="@id/search_bar"/>
+        <TextView
+            android:id="@+id/searchResultTV"
+            style="@style/TextAppearance.Material3.HeadlineSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="0dp"
+            android:lineSpacingExtra="5sp"
+            android:padding="10dp"
+            android:text="@string/searchResult" />
 
-            <TextView
-                android:id="@+id/ingredientTV"
-                style="@style/TextAppearance.Material3.HeadlineMedium"
-                android:layout_width="wrap_content"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/searchResultRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/searchbar_scrolling_view_behavior">
+
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="0dp"
-                android:lineSpacingExtra="5sp"
-                android:padding="10dp"
-                android:text="@string/searchByIngredient" />
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/ingredientTV"
+                    style="@style/TextAppearance.Material3.HeadlineMedium"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="0dp"
+                    android:lineSpacingExtra="5sp"
+                    android:padding="10dp"
+                    android:text="@string/searchByIngredient" />
 
 
-            <TextView
-                android:id="@+id/areaTV"
-                style="@style/TextAppearance.Material3.HeadlineMedium"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="0dp"
-                android:lineSpacingExtra="5sp"
-                android:padding="10dp"
-                android:text="@string/searchByArea" />
+                <TextView
+                    android:id="@+id/areaTV"
+                    style="@style/TextAppearance.Material3.HeadlineMedium"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="0dp"
+                    android:lineSpacingExtra="5sp"
+                    android:padding="10dp"
+                    android:text="@string/searchByArea" />
 
-            <TextView
-                android:id="@+id/categoryTV"
-                style="@style/TextAppearance.Material3.HeadlineMedium"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="0dp"
-                android:lineSpacingExtra="5sp"
-                android:padding="10dp"
-                android:text="@string/searchByCategory" />
-
-
-        </LinearLayout>
-    </androidx.core.widget.NestedScrollView>
+                <TextView
+                    android:id="@+id/categoryTV"
+                    style="@style/TextAppearance.Material3.HeadlineMedium"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="0dp"
+                    android:lineSpacingExtra="5sp"
+                    android:padding="10dp"
+                    android:text="@string/searchByCategory" />
 
 
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
 
 
-
-</LinearLayout>
+    </LinearLayout>
 

@@ -7,6 +7,7 @@ import androidx.lifecycle.LiveData;
 
 import com.example.foodflow.db.ConcreteLocalSource;
 import com.example.foodflow.models.Meal;
+import com.example.foodflow.models.PlannerMeal;
 import com.example.foodflow.network.NetworkDelegate;
 import com.example.foodflow.network.RemoteSource;
 
@@ -32,6 +33,11 @@ public class Repository implements RepositoryInterface {
         return instance;
     }
 
+
+    @Override
+    public void getAllMeals(NetworkDelegate networkDelegate) {
+        remoteSource.getAllMeals(networkDelegate);
+    }
 
     @Override
     public void getMealOfTheDay(NetworkDelegate networkDelegate) {
@@ -91,5 +97,25 @@ public class Repository implements RepositoryInterface {
     @Override
     public void delete(Meal meal) {
         concreteLocalSource.delete(meal);
+    }
+
+    @Override
+    public LiveData<List<PlannerMeal>> getDayMeals(String weekDay) {
+        return concreteLocalSource.getMealsByDay(weekDay);
+    }
+
+    @Override
+    public LiveData<List<PlannerMeal>> getCurrentWeekMeals() {
+        return concreteLocalSource.getWeekMeals();
+    }
+
+    @Override
+    public void plan(PlannerMeal meal) {
+        concreteLocalSource.plan(meal);
+    }
+
+    @Override
+    public void unPlan(PlannerMeal meal) {
+        concreteLocalSource.unPlan(meal);
     }
 }

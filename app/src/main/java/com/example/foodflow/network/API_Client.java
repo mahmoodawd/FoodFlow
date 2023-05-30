@@ -10,6 +10,7 @@ import com.example.foodflow.models.CategoriesResponse;
 import com.example.foodflow.models.Ingredient;
 import com.example.foodflow.models.IngredientsResponse;
 import com.example.foodflow.models.MealsResponse;
+import com.example.foodflow.models.PlannerMealResponse;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -50,6 +51,30 @@ public class API_Client implements RemoteSource {
         return instance;
     }
 
+
+    @Override
+    public void getAllMeals(NetworkDelegate networkDelegate) {
+        Call<PlannerMealResponse> meals = apiService.getAllMeals("");
+        meals.enqueue(new retrofit2.Callback<PlannerMealResponse>() {
+            @Override
+            public void onResponse(@NonNull Call<PlannerMealResponse> call, Response<PlannerMealResponse> response) {
+                Log.i(TAG, "onResponse");
+                assert response.body() != null;
+                Log.i(TAG, String.valueOf(response.body().getPlannerMeals()));
+                if (response.isSuccessful() && response.body() != null) {
+                    networkDelegate.onSuccess(response.body().getPlannerMeals());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<PlannerMealResponse> call, Throwable t) {
+                Log.i(TAG, "onFailure");
+                Log.e(TAG, t.getMessage());
+                t.printStackTrace();
+                networkDelegate.onFailure(t);
+            }
+        });
+    }
 
     @Override
     public void getMealOfTheDay(NetworkDelegate callback) {

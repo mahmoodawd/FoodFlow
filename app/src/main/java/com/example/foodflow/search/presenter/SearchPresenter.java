@@ -34,6 +34,16 @@ public class SearchPresenter implements SearchPresenterInterface, NetworkDelegat
     }
 
     @Override
+    public void getAreas() {
+        _repo.getAreas(this);
+    }
+
+    @Override
+    public void getIngredients() {
+        _repo.getIngredients(this);
+    }
+
+    @Override
     public void searchMeal(String mealName) {
         _repo.searchMeals(this, mealName);
     }

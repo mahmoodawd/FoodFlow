@@ -5,9 +5,11 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,7 +35,7 @@ import java.util.List;
 public class SearchFragment extends Fragment implements SearchViewInterface, OnThumbnailClickListener {
 
     RecyclerView searchResultRecyclerView;
-    MealsAdapter searchResultAdapter;
+    SearchAdapter searchResultAdapter;
     SearchView searchView;
     private TextView areaTV;
     private TextView ingredientTV;
@@ -63,8 +65,8 @@ public class SearchFragment extends Fragment implements SearchViewInterface, OnT
         ingredientTV = view.findViewById(R.id.ingredientTV);
         categoryTv = view.findViewById(R.id.categoryTV);
         searchResultTv = view.findViewById(R.id.searchResultTV);
-        searchResultTv.setVisibility(View.GONE);
         searchView = view.findViewById(R.id.searchView);
+        searchResultTv.setVisibility(View.GONE);
 
 
         searchPresenter = new SearchPresenter(this, Repository.
@@ -72,16 +74,21 @@ public class SearchFragment extends Fragment implements SearchViewInterface, OnT
                         ConcreteLocalSource.getInstance(this.getContext())));
 
 
-        areaTV.setOnClickListener(this::navToAreas);
-        ingredientTV.setOnClickListener(this::navToIngredients);
-        categoryTv.setOnClickListener(this::navToCategories);
+//        areaTV.setOnClickListener(this::navToAreas);
+//        ingredientTV.setOnClickListener(this::navToIngredients);
+//        categoryTv.setOnClickListener(this::navToCategories);
 
         LinearLayoutManager searchResultLayoutManager = new LinearLayoutManager(this.getContext());
         searchResultLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
-        searchResultAdapter = new MealsAdapter(this.getContext(), new ArrayList<>(), this);
+        searchResultAdapter = new SearchAdapter(this.getContext(), new ArrayList<>(), this);
         searchResultRecyclerView.setHasFixedSize(true);
         searchResultRecyclerView.setLayoutManager(searchResultLayoutManager);
         searchResultRecyclerView.setAdapter(searchResultAdapter);
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(this.getContext(), DividerItemDecoration.VERTICAL);
+        searchResultRecyclerView.addItemDecoration(dividerItemDecoration);
+        searchPresenter.getCategories();
+        searchPresenter.getIngredients();
+        searchPresenter.getAreas();
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -100,13 +107,16 @@ public class SearchFragment extends Fragment implements SearchViewInterface, OnT
     }
 
     @Override
-    public void showSearchResult(List<Meal> searchedMeals) {
+    public void showSearchResult(List<Object> searchedMeals) {
         if (searchedMeals == null || searchedMeals.isEmpty()) {
-            Toast.makeText(getContext(), "No search results found", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(getContext(), "No search results found", Toast.LENGTH_SHORT).show();
         } else {
-            Toast.makeText(this.getContext(), "Search Done", Toast.LENGTH_SHORT).show();
-            searchResultTv.setVisibility(View.VISIBLE);
-            searchResultAdapter.setMealsList(searchedMeals);
+//            Toast.makeText(this.getContext(), "Search Done", Toast.LENGTH_SHORT).show();
+//            searchResultTv.setVisibility(View.VISIBLE);
+            for (Object o : searchedMeals){
+                Log.i("searchedMeals:", o.toString());
+            }
+            searchResultAdapter.setItemList(searchedMeals);
             searchResultAdapter.notifyDataSetChanged();
         }
     }

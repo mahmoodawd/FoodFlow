@@ -5,13 +5,16 @@ import android.content.Context;
 import androidx.lifecycle.LiveData;
 
 import com.example.foodflow.models.Meal;
+import com.example.foodflow.models.PlannerMeal;
 
 import java.util.List;
 
 public class ConcreteLocalSource implements LocalSource {
     private Context context;
     MealDoa mealDoa;
+    PlannerMealDoa plannerMealDoa;
     LiveData<List<Meal>> storedMeals;
+    LiveData<List<PlannerMeal>> dayMeals;
     private static ConcreteLocalSource instance = null;
 
 
@@ -19,7 +22,11 @@ public class ConcreteLocalSource implements LocalSource {
         this.context = context;
         FavoritesDB db = FavoritesDB.getInstance(context.getApplicationContext());
         mealDoa = db.mealDao();
+        plannerMealDoa = db.plannerMealDoa();
         storedMeals = mealDoa.getStoredMeals();
+        dayMeals = plannerMealDoa.getWeekMeals();
+
+
 
     }
 
@@ -36,22 +43,53 @@ public class ConcreteLocalSource implements LocalSource {
     }
 
     @Override
-    public void insert(Meal Meal) {
+    public void insert(Meal meal) {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                mealDoa.insertAll(Meal);
+                mealDoa.insertAll(meal);
             }
         }).start();
     }
 
     @Override
-    public void delete(Meal Meal) {
+    public void delete(Meal meal) {
 
         new Thread(new Runnable() {
             @Override
             public void run() {
-                mealDoa.delete(Meal);
+                mealDoa.delete(meal);
+            }
+        }).start();
+    }
+
+    @Override
+    public LiveData<List<PlannerMeal>> getWeekMeals() {
+        return dayMeals;
+    }
+
+    @Override
+    public LiveData<List<PlannerMeal>> getMealsByDay(String weekDay) {
+        dayMeals = plannerMealDoa.getDayMeals(weekDay);
+        return dayMeals;
+    }
+
+    @Override
+    public void plan(PlannerMeal meal) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                plannerMealDoa.insertAll(meal);
+            }
+        }).start();
+    }
+
+    @Override
+    public void unPlan(PlannerMeal meal) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                plannerMealDoa.delete(meal);
             }
         }).start();
     }

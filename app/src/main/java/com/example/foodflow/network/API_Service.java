@@ -5,12 +5,17 @@ import com.example.foodflow.models.AreasResponse;
 import com.example.foodflow.models.CategoriesResponse;
 import com.example.foodflow.models.IngredientsResponse;
 import com.example.foodflow.models.MealsResponse;
+import com.example.foodflow.models.PlannerMealResponse;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
 
 public interface API_Service {
+
+
+    @GET("search.php")
+    Call<PlannerMealResponse> getAllMeals(@Query("s") String meal);
 
     @GET("random.php")
     Call<MealsResponse> getRandomMeal();

@@ -31,7 +31,14 @@
         android:id="@+id/plannerFragment"
         android:name="com.example.foodflow.planner.view.PlannerFragment"
         android:label="fragment_planner"
-        tools:layout="@layout/fragment_planner" />
+        tools:layout="@layout/fragment_planner" >
+        <action
+            android:id="@+id/action_plannerFragment_to_mealDetailsFragment"
+            app:destination="@id/mealDetailsFragment" />
+        <action
+            android:id="@+id/action_plannerFragment_to_allMealsFragment"
+            app:destination="@id/allMealsFragment" />
+    </fragment>
     <fragment
         android:id="@+id/searchFragment"
         android:name="com.example.foodflow.search.view.SearchFragment"
@@ -120,5 +127,14 @@
         <action
             android:id="@+id/action_categoriesFragment_to_categoryMealsFragment"
             app:destination="@id/categoryMealsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/allMealsFragment"
+        android:name="com.example.foodflow.planner.all_meals.view.AllMealsFragment"
+        android:label="fragment_all_meals"
+        tools:layout="@layout/fragment_all_meals" >
+        <argument
+            android:name="weekDay"
+            app:argType="string" />
     </fragment>
 </navigation>

@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -46,11 +47,13 @@ public class FavoritesFragment extends Fragment implements MealsViewInterface, O
         mealsRecyclerView = view.findViewById(R.id.mealsRecyclerView);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this.getContext());
         layoutManager.setOrientation(RecyclerView.HORIZONTAL);
+        StaggeredGridLayoutManager gridLayoutManager =
+                new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         mealsAdapter = new MealsAdapter(this.getContext(), new ArrayList<>(), this);
         mealsPresenter = new MealsPresenter(this, Repository
                 .getInstance(this.getContext(), API_Client.getInstance(), ConcreteLocalSource.getInstance(this.getContext())));
         mealsRecyclerView.setHasFixedSize(true);
-        mealsRecyclerView.setLayoutManager(layoutManager);
+        mealsRecyclerView.setLayoutManager(gridLayoutManager);
         mealsRecyclerView.setAdapter(mealsAdapter);
         mealsPresenter.getFavorites();
         mealsPresenter.informView(this.getViewLifecycleOwner());
@@ -59,16 +62,16 @@ public class FavoritesFragment extends Fragment implements MealsViewInterface, O
 
 
 
+    @Override
+    public void onImageClick(View view, String mealId) {
+            showMealDetails(view, mealId);
+
+    }
+
     private void showMealDetails(View view, String mealId) {
         FavoritesFragmentDirections.ActionFavoritesFragmentToMealDetailsFragment action = FavoritesFragmentDirections
                 .actionFavoritesFragmentToMealDetailsFragment(mealId);
         Navigation.findNavController(view).navigate(action);
-    }
-
-    @Override
-    public void onImageClick(View view, String mealId) {
-        showMealDetails(view, mealId);
-
     }
 
     @Override
