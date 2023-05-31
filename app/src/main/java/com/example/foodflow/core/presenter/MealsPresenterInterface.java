@@ -11,7 +11,8 @@ public interface MealsPresenterInterface {
 
     void getMealOfTheDay();
 
-    void addMeal(Meal meal);
+    void addMealToFav(Meal meal);
+    void deleteMealFromFav(Meal meal);
 
     LiveData<List<Meal>> getFavorites();
 

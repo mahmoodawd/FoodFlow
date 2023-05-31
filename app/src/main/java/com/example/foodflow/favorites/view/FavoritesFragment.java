@@ -15,19 +15,22 @@ import android.view.ViewGroup;
 import com.example.foodflow.R;
 import com.example.foodflow.core.presenter.MealsPresenter;
 import com.example.foodflow.core.view.MealsViewInterface;
+import com.example.foodflow.core.view.OnFavIconClickListener;
 import com.example.foodflow.db.ConcreteLocalSource;
 import com.example.foodflow.core.view.MealsAdapter;
 import com.example.foodflow.core.view.OnThumbnailClickListener;
 import com.example.foodflow.models.Meal;
+import com.example.foodflow.models.PlannerMeal;
 import com.example.foodflow.network.API_Client;
+import com.example.foodflow.planner.view.OnDelIconClickListener;
 import com.example.foodflow.repositories.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class FavoritesFragment extends Fragment implements MealsViewInterface, OnThumbnailClickListener {
+public class FavoritesFragment extends Fragment implements MealsViewInterface, OnThumbnailClickListener, OnDelImgClickListener {
     RecyclerView mealsRecyclerView;
-    MealsAdapter mealsAdapter;
+    FavoritesMealsAdapter mealsAdapter;
     MealsPresenter mealsPresenter;
 
     public FavoritesFragment() {
@@ -46,14 +49,12 @@ public class FavoritesFragment extends Fragment implements MealsViewInterface, O
         View view = inflater.inflate(R.layout.fragment_favorites, container, false);
         mealsRecyclerView = view.findViewById(R.id.mealsRecyclerView);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this.getContext());
-        layoutManager.setOrientation(RecyclerView.HORIZONTAL);
-        StaggeredGridLayoutManager gridLayoutManager =
-                new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
-        mealsAdapter = new MealsAdapter(this.getContext(), new ArrayList<>(), this);
+        layoutManager.setOrientation(RecyclerView.VERTICAL);
+        mealsAdapter = new FavoritesMealsAdapter(this.getContext(), new ArrayList<>(), this, this);
         mealsPresenter = new MealsPresenter(this, Repository
                 .getInstance(this.getContext(), API_Client.getInstance(), ConcreteLocalSource.getInstance(this.getContext())));
         mealsRecyclerView.setHasFixedSize(true);
-        mealsRecyclerView.setLayoutManager(gridLayoutManager);
+        mealsRecyclerView.setLayoutManager(layoutManager);
         mealsRecyclerView.setAdapter(mealsAdapter);
         mealsPresenter.getFavorites();
         mealsPresenter.informView(this.getViewLifecycleOwner());
@@ -61,10 +62,9 @@ public class FavoritesFragment extends Fragment implements MealsViewInterface, O
     }
 
 
-
     @Override
     public void onImageClick(View view, String mealId) {
-            showMealDetails(view, mealId);
+        showMealDetails(view, mealId);
 
     }
 
@@ -83,5 +83,17 @@ public class FavoritesFragment extends Fragment implements MealsViewInterface, O
     @Override
     public void addToFavourites(Meal meal) {
 
+    }
+
+    @Override
+    public void deleteFromFavorites(Meal meal) {
+        mealsPresenter.deleteMealFromFav(meal);
+    }
+
+
+    @Override
+    public void onDelIconClick(Meal meal) {
+        deleteFromFavorites(meal);
+        mealsAdapter.notifyDataSetChanged();
     }
 }

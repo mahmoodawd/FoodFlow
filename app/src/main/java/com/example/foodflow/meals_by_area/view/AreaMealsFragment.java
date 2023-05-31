@@ -15,10 +15,9 @@ import com.example.foodflow.R;
 import com.example.foodflow.core.presenter.MealsPresenter;
 import com.example.foodflow.core.view.MealsAdapter;
 import com.example.foodflow.core.view.MealsViewInterface;
+import com.example.foodflow.core.view.OnFavIconClickListener;
 import com.example.foodflow.core.view.OnThumbnailClickListener;
 import com.example.foodflow.db.ConcreteLocalSource;
-import com.example.foodflow.meals_by_category.view.CategoryMealsFragmentArgs;
-import com.example.foodflow.meals_by_category.view.CategoryMealsFragmentDirections;
 import com.example.foodflow.models.Meal;
 import com.example.foodflow.network.API_Client;
 import com.example.foodflow.repositories.Repository;
@@ -27,7 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class AreaMealsFragment extends Fragment implements MealsViewInterface, OnThumbnailClickListener {
+public class AreaMealsFragment extends Fragment implements MealsViewInterface, OnThumbnailClickListener, OnFavIconClickListener {
     RecyclerView mealsRecyclerView;
     MealsAdapter mealsAdapter;
     MealsPresenter mealsPresenter;
@@ -52,7 +51,7 @@ public class AreaMealsFragment extends Fragment implements MealsViewInterface, O
         mealsRecyclerView = view.findViewById(R.id.areaMealsRecyclerView);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this.getContext());
         layoutManager.setOrientation(RecyclerView.HORIZONTAL);
-        mealsAdapter = new MealsAdapter(this.getContext(), new ArrayList<>(), this);
+        mealsAdapter = new MealsAdapter(this.getContext(), new ArrayList<>(), this, this);
         mealsPresenter = new MealsPresenter(this, Repository
                 .getInstance(this.getContext(), API_Client.getInstance(), ConcreteLocalSource.getInstance(this.getContext())));
         mealsRecyclerView.setHasFixedSize(true);
@@ -78,12 +77,26 @@ public class AreaMealsFragment extends Fragment implements MealsViewInterface, O
 
     @Override
     public void addToFavourites(Meal meal) {
+        mealsPresenter.addMealToFav(meal);
+    }
 
+    @Override
+    public void deleteFromFavorites(Meal meal) {
+        mealsPresenter.deleteMealFromFav(meal);
     }
 
 
     @Override
     public void onImageClick(View view, String mealId) {
         showMealDetails(view, mealId);
+    }
+
+    @Override
+    public void onFavClick(boolean isChecked, Meal meal) {
+        if (isChecked) {
+            addToFavourites(meal);
+        } else {
+            deleteFromFavorites(meal);
+        }
     }
 }

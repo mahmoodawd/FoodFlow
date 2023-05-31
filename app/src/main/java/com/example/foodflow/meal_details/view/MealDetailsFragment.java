@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class MealDetailsFragment extends Fragment implements MealDetailsViewInterface, OnFABClickListener {
+public class MealDetailsFragment extends Fragment implements MealDetailsViewInterface {
     RecyclerView mealDetailsRecyclerView;
     MealDetailsAdapter mealsAdapter;
     MealDetailsPresenter mealDetailsPresenter;
@@ -41,7 +41,7 @@ public class MealDetailsFragment extends Fragment implements MealDetailsViewInte
         mealDetailsRecyclerView = view.findViewById(R.id.mealsDetailsRecyclerView);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this.getContext());
         layoutManager.setOrientation(RecyclerView.HORIZONTAL);
-        mealsAdapter = new MealDetailsAdapter(this.getContext(), this.getLifecycle(), new ArrayList<>(), this);
+        mealsAdapter = new MealDetailsAdapter(this.getContext(), this.getLifecycle(), new ArrayList<>());
         mealDetailsPresenter = new MealDetailsPresenter(this, Repository
                 .getInstance(this.getContext(), API_Client.getInstance(), ConcreteLocalSource.getInstance(this.getContext())));
         mealDetailsRecyclerView.setHasFixedSize(true);
@@ -61,27 +61,5 @@ public class MealDetailsFragment extends Fragment implements MealDetailsViewInte
 
     }
 
-    @Override
-    public void addToFavourites(Meal meal) {
-        mealDetailsPresenter.addMeal(meal);
-        mealsAdapter.notifyDataSetChanged();
-        Toast.makeText(this.getContext(), "Added To Favs", Toast.LENGTH_SHORT).show();
 
-    }
-
-    @Override
-    public void deleteFromFavorites(Meal meal) {
-        mealDetailsPresenter.deleteMeal(meal);
-        mealsAdapter.notifyDataSetChanged();
-        Toast.makeText(this.getContext(), "Removed From Favs", Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void onClick(boolean isChecked, Meal meal) {
-        if (isChecked) {
-            addToFavourites(meal);
-        } else {
-            deleteFromFavorites(meal);
-        }
-    }
 }

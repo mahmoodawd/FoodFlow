@@ -6,7 +6,5 @@ import java.util.List;
 
 public interface MealDetailsViewInterface {
     void displayMealDetails(List<Meal> mealList);
-    void addToFavourites(Meal meal);
-    void deleteFromFavorites(Meal meal);
 
 }

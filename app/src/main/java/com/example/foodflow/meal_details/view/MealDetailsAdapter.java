@@ -9,8 +9,10 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.core.util.Pair;
 import androidx.lifecycle.Lifecycle;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -22,24 +24,26 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTube
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+
+import io.reactivex.rxjava3.core.Observable;
 
 
 public class MealDetailsAdapter extends RecyclerView.Adapter<MealDetailsAdapter.ViewHolder> {
     private final Context context;
     private Lifecycle lifecycle;
-    private final OnFABClickListener onFABClickListener;
     private List<Meal> meals;
     StringBuilder ingredientsSB = new StringBuilder();
     StringBuilder measuresSB = new StringBuilder();
+    StringBuilder ingredientsMeasures = new StringBuilder();
     private static final String TAG = "MealsRecyclerView";
 
 
-    public MealDetailsAdapter(Context context, Lifecycle lifecycle, List<Meal> values, OnFABClickListener clickListener) {
+    public MealDetailsAdapter(Context context, Lifecycle lifecycle, List<Meal> values) {
         this.lifecycle = lifecycle;
         meals = new ArrayList<>();
         this.context = context;
         this.meals = values;
-        onFABClickListener = clickListener;
     }
 
     void setMealsList(List<Meal> mealList) {
@@ -69,9 +73,9 @@ public class MealDetailsAdapter extends RecyclerView.Adapter<MealDetailsAdapter.
         holder.mealArea.setText(meal.getStrArea());
         addIngredientToIngredients(meal);
         addMeasures(meal);
-        holder.ingredients.setText(ingredientsSB);
-        holder.measures.setText(measuresSB);
-        holder.addToFavorites.setOnCheckedChangeListener((buttonView, isChecked) -> onFABClickListener.onClick(isChecked, meal));
+        appendIngredientsAndMeasures(meal);
+        holder.ingredients.setText(ingredientsMeasures);
+        holder.measures.setVisibility(View.GONE);
         holder.youTubePlayerView.addYouTubePlayerListener(new AbstractYouTubePlayerListener() {
             @Override
             public void onReady(@NonNull YouTubePlayer youTubePlayer) {
@@ -84,7 +88,7 @@ public class MealDetailsAdapter extends RecyclerView.Adapter<MealDetailsAdapter.
         Log.i(TAG, "onBindViewHolder");
     }
 
-    private void addIngredientToIngredients(@NonNull Meal meal) {
+    private Observable<List<String>> addIngredientToIngredients(@NonNull Meal meal) {
 
         List<String> ingredients = new ArrayList<>();
         ingredients.add(meal.getStrIngredient1());
@@ -109,6 +113,9 @@ public class MealDetailsAdapter extends RecyclerView.Adapter<MealDetailsAdapter.
         ingredients.add(meal.getStrIngredient20());
 
         appendIngredient(ingredients);
+        return Observable.fromArray(ingredients.stream()
+                .filter(ingredient -> !ingredient.isEmpty())
+                .collect(Collectors.toList()));
     }
 
     private void appendIngredient(List<String> ingredients) {
@@ -119,7 +126,7 @@ public class MealDetailsAdapter extends RecyclerView.Adapter<MealDetailsAdapter.
         }
     }
 
-    private void addMeasures(@NonNull Meal meal) {
+    private Observable<List<String>> addMeasures(@NonNull Meal meal) {
         List<String> measures = new ArrayList<>();
         measures.add(meal.getStrMeasure1());
         measures.add(meal.getStrMeasure2());
@@ -142,6 +149,10 @@ public class MealDetailsAdapter extends RecyclerView.Adapter<MealDetailsAdapter.
         measures.add(meal.getStrMeasure19());
         measures.add(meal.getStrMeasure20());
         appendMeasures(measures);
+        return Observable.fromArray(measures.stream()
+                .filter(measure -> !measure.isEmpty())
+                .collect(Collectors.toList()));
+
 
     }
 
@@ -152,6 +163,25 @@ public class MealDetailsAdapter extends RecyclerView.Adapter<MealDetailsAdapter.
             }
         }
     }
+
+    private void appendIngredientsAndMeasures(Meal meal) {
+        Observable.zip(addIngredientToIngredients(meal), addMeasures(meal),
+                        (ingredients, measures) -> new Pair(ingredients, measures))
+                .subscribe(pair -> {
+                            List<String> ingredients = (List<String>) pair.first;
+                            List<String> measures = (List<String>) pair.second;
+
+                            ingredientsMeasures.setLength(0);
+                            for (int i = 0; i < measures.size(); i++) {
+                                ingredientsMeasures.append(ingredients.get(i)
+                                        .concat(":  ")
+                                        .concat(measures.get(i))
+                                        .concat("\n"));
+                            }
+                        },
+                        error -> Toast.makeText(context, error.getMessage(), Toast.LENGTH_SHORT).show());
+    }
+
 
     @Override
     public int getItemCount() {

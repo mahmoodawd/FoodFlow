@@ -22,16 +22,6 @@ public class MealDetailsPresenter implements MealDetailsPresenterInterface, Netw
     }
 
     @Override
-    public void addMeal(Meal meal) {
-        _repo.insert(meal);
-    }
-
-    @Override
-    public void deleteMeal(Meal meal) {
-        _repo.delete(meal);
-    }
-
-    @Override
     public void onSuccess(List mealList) {
         _view.displayMealDetails(mealList);
     }

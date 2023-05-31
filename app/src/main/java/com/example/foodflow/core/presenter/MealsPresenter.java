@@ -36,14 +36,20 @@ public class MealsPresenter implements MealsPresenterInterface, NetworkDelegate 
     }
 
     @Override
-    public void addMeal(Meal meal) {
-        _repo.insert(meal);
+    public void addMealToFav(Meal meal) {
+        _repo.insertIntoFavorites(meal);
+    }
+
+    @Override
+    public void deleteMealFromFav(Meal meal) {
+        _repo.deleteFromFavorites(meal);
     }
 
     @Override
     public LiveData<List<Meal>> getFavorites() {
         return _repo.getFavoritesMeals();
     }
+
     @Override
     public void informView(LifecycleOwner lifecycleOwner) { //in case of data retrieved from room(Favorites)
         _repo.getFavoritesMeals().observe(lifecycleOwner, meals -> {

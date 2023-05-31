@@ -1,4 +1,4 @@
-package com.example.foodflow.core.view;
+package com.example.foodflow.favorites.view;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -6,7 +6,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -16,22 +15,23 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.foodflow.R;
+import com.example.foodflow.core.view.OnThumbnailClickListener;
 import com.example.foodflow.models.Meal;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class MealsAdapter extends RecyclerView.Adapter<MealsAdapter.ViewHolder> {
+public class FavoritesMealsAdapter extends RecyclerView.Adapter<FavoritesMealsAdapter.ViewHolder> {
     private final Context context;
     private List<Meal> meals;
     private final OnThumbnailClickListener onMealThumbClickListener;
-    private static final String TAG = "MealsRecyclerView";
-    private OnFavIconClickListener onFavIconClickListener;
+    private final OnDelImgClickListener onDelImgClickListener;
+    private static String TAG = "plannerMealsRecyclerView";
 
-    public MealsAdapter(Context context, List<Meal> values, OnThumbnailClickListener onMealThumbClickListener, OnFavIconClickListener onFavIconClickListener) {
+    public FavoritesMealsAdapter(Context context, List<Meal> values, OnThumbnailClickListener onMealThumbClickListener, OnDelImgClickListener onDelIconClickListener) {
         this.onMealThumbClickListener = onMealThumbClickListener;
-        this.onFavIconClickListener = onFavIconClickListener;
+        this.onDelImgClickListener = onDelIconClickListener;
         meals = new ArrayList<>();
         this.context = context;
         this.meals = values;
@@ -40,6 +40,7 @@ public class MealsAdapter extends RecyclerView.Adapter<MealsAdapter.ViewHolder> 
 
     public void setMealsList(List<Meal> mealList) {
         this.meals = mealList;
+        notifyDataSetChanged();
     }
 
 
@@ -47,7 +48,7 @@ public class MealsAdapter extends RecyclerView.Adapter<MealsAdapter.ViewHolder> 
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup recyclerView, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(recyclerView.getContext());
-        View v = inflater.inflate(R.layout.meal_layout, recyclerView, false);
+        View v = inflater.inflate(R.layout.favorite_meal_layout, recyclerView, false);
         CardView cardView = (CardView) v;
         ViewHolder viewHolder = new ViewHolder(cardView);
         Log.i(TAG, "onCreateViewHolder");
@@ -57,16 +58,16 @@ public class MealsAdapter extends RecyclerView.Adapter<MealsAdapter.ViewHolder> 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, @SuppressLint("RecyclerView") int position) {
         Meal meal = meals.get(position);
-        holder.titleTxt.setText(meal.getStrMeal());
-        holder.mealAreaTxt.setText(meal.getStrArea());
-        Glide.with(context).load(meal.getStrMealThumb()).into(holder.imageView);
+        holder.mealTitle.setText(meal.getStrMeal());
+        holder.mealArea.setText(meal.getStrArea());
+        Glide.with(context).load(meal.getStrMealThumb()).into(holder.mealThumb);
 
-        holder.imageView.setOnClickListener(v -> {
+        holder.mealThumb.setOnClickListener(v -> {
             onMealThumbClickListener.onImageClick(v, meal.getIdMeal());
         });
-
-        holder.addToFavorites.setOnCheckedChangeListener((buttonView, isChecked) -> onFavIconClickListener.onFavClick(isChecked, meal));
-
+        holder.deleteImg.setOnClickListener(v -> {
+            onDelImgClickListener.onDelIconClick(meal);
+        });
         Log.i(TAG, "onBindViewHolder");
     }
 
@@ -77,21 +78,21 @@ public class MealsAdapter extends RecyclerView.Adapter<MealsAdapter.ViewHolder> 
 
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView titleTxt;
-        public ImageView imageView;
-        public TextView mealAreaTxt;
+        public TextView mealTitle;
+        public TextView mealArea;
+        public ImageView mealThumb;
+        public ImageView deleteImg;
         public CardView mealLayout;
-        public CheckBox addToFavorites;
         public View layout;
 
         public ViewHolder(View v) {
             super(v);
             layout = v;
-            titleTxt = v.findViewById(R.id.mealTitle);
-            imageView = v.findViewById(R.id.mealImage);
-            mealAreaTxt = v.findViewById(R.id.mealArea);
-            addToFavorites = v.findViewById(R.id.iconFav);
-            mealLayout = v.findViewById(R.id.mealLayout);
+            mealTitle = v.findViewById(R.id.mealTitle);
+            mealArea = v.findViewById(R.id.mealArea);
+            mealThumb = v.findViewById(R.id.mealImage);
+            deleteImg = v.findViewById(R.id.delImg);
+            mealLayout = v.findViewById(R.id.favoriteMealLayout);
         }
     }
 }

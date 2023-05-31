@@ -4,8 +4,11 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import com.google.android.material.progressindicator.CircularProgressIndicator;
 
+import com.example.foodflow.core.view.OnFavIconClickListener;
+import com.facebook.shimmer.ShimmerFrameLayout;
+
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -25,11 +28,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class HomeFragment extends Fragment implements MealsViewInterface, OnThumbnailClickListener {
+public class HomeFragment extends Fragment implements MealsViewInterface, OnThumbnailClickListener, OnFavIconClickListener {
     RecyclerView mealsRecyclerView;
     MealsAdapter mealsAdapter;
     MealsPresenter mealsPresenter;
-    CircularProgressIndicator loadingBar;
+    ShimmerFrameLayout shimmerFrameLayout;
+    CardView placeHolder;
+
 
     public HomeFragment() {
         // Required empty public constructor
@@ -46,13 +51,12 @@ public class HomeFragment extends Fragment implements MealsViewInterface, OnThum
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_home, container, false);
-
+        shimmerFrameLayout = view.findViewById(R.id.shimmer_view_container);
+        placeHolder = view.findViewById(R.id.mealThumbPlaceHolder);
         mealsRecyclerView = view.findViewById(R.id.mealsRecyclerView);
-        loadingBar = view.findViewById(R.id.loadingIndicator);
-        loadingBar.setVisibility(View.VISIBLE);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this.getContext());
         layoutManager.setOrientation(RecyclerView.HORIZONTAL);
-        mealsAdapter = new MealsAdapter(this.getContext(), new ArrayList<>(), this);
+        mealsAdapter = new MealsAdapter(this.getContext(), new ArrayList<>(), this, this);
         mealsPresenter = new MealsPresenter(this, Repository
                 .getInstance(this.getContext(), API_Client.getInstance(), ConcreteLocalSource.getInstance(this.getContext())));
         mealsRecyclerView.setHasFixedSize(true);
@@ -70,18 +74,33 @@ public class HomeFragment extends Fragment implements MealsViewInterface, OnThum
 
     @Override
     public void displayMeals(List<Meal> mealList) {
-        loadingBar.setVisibility(View.GONE);
+        shimmerFrameLayout.hideShimmer();
+        placeHolder.setVisibility(View.GONE);
         mealsAdapter.setMealsList(mealList);
         mealsAdapter.notifyDataSetChanged();
     }
 
     @Override
     public void addToFavourites(Meal meal) {
+        mealsPresenter.addMealToFav(meal);
+    }
 
+    @Override
+    public void deleteFromFavorites(Meal meal) {
+        mealsPresenter.deleteMealFromFav(meal);
     }
 
     @Override
     public void onImageClick(View view, String mealId) {
         showMealDetails(view, mealId);
+    }
+
+    @Override
+    public void onFavClick(boolean isChecked, Meal meal) {
+        if (isChecked) {
+            addToFavourites(meal);
+        } else {
+            deleteFromFavorites(meal);
+        }
     }
 }
