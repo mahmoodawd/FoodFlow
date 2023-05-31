@@ -19,11 +19,12 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/mealsRecyclerView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="70dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:listitem="@layout/meal_layout" />
+        tools:listitem="@layout/favorite_meal_layout" />
 
 </LinearLayout>

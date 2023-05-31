@@ -3,6 +3,7 @@ package com.example.foodflow.search.view;
 import android.content.Context;
 import android.os.Bundle;
 
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -14,17 +15,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.foodflow.R;
-import com.example.foodflow.core.view.MealsAdapter;
 import com.example.foodflow.db.ConcreteLocalSource;
 import com.example.foodflow.core.view.OnThumbnailClickListener;
-import com.example.foodflow.models.Meal;
 import com.example.foodflow.network.API_Client;
 import com.example.foodflow.repositories.Repository;
 import com.example.foodflow.search.presenter.SearchPresenter;
+import com.facebook.shimmer.ShimmerFrameLayout;
 
 import androidx.appcompat.widget.SearchView;
 
@@ -37,10 +38,12 @@ public class SearchFragment extends Fragment implements SearchViewInterface, OnT
     RecyclerView searchResultRecyclerView;
     SearchAdapter searchResultAdapter;
     SearchView searchView;
-    private TextView areaTV;
-    private TextView ingredientTV;
-    private TextView categoryTv;
+    private Button AreasBtn;
+    private Button ingredientsBtn;
+    private Button categoriesBtn;
     private TextView searchResultTv;
+    ShimmerFrameLayout shimmerFrameLayout;
+    CardView placeHolder;
 
 
     SearchPresenter searchPresenter;
@@ -61,11 +64,13 @@ public class SearchFragment extends Fragment implements SearchViewInterface, OnT
 
         View view = inflater.inflate(R.layout.fragment_search, container, false);
         searchResultRecyclerView = view.findViewById(R.id.searchResultRecyclerView);
-        areaTV = view.findViewById(R.id.areaTV);
-        ingredientTV = view.findViewById(R.id.ingredientTV);
-        categoryTv = view.findViewById(R.id.categoryTV);
+        AreasBtn = view.findViewById(R.id.areasNavBtn);
+        ingredientsBtn = view.findViewById(R.id.ingredientNavBtn);
+        categoriesBtn = view.findViewById(R.id.categoriesNavBtn);
         searchResultTv = view.findViewById(R.id.searchResultTV);
         searchView = view.findViewById(R.id.searchView);
+        shimmerFrameLayout = view.findViewById(R.id.search_shimmer_view_container);
+        placeHolder = view.findViewById(R.id.mealThumbPlaceHolder);
         searchResultTv.setVisibility(View.GONE);
 
 
@@ -74,9 +79,9 @@ public class SearchFragment extends Fragment implements SearchViewInterface, OnT
                         ConcreteLocalSource.getInstance(this.getContext())));
 
 
-//        areaTV.setOnClickListener(this::navToAreas);
-//        ingredientTV.setOnClickListener(this::navToIngredients);
-//        categoryTv.setOnClickListener(this::navToCategories);
+        ingredientsBtn.setOnClickListener(this::navToIngredients);
+        AreasBtn.setOnClickListener(this::navToAreas);
+        categoriesBtn.setOnClickListener(this::navToCategories);
 
         LinearLayoutManager searchResultLayoutManager = new LinearLayoutManager(this.getContext());
         searchResultLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
@@ -86,12 +91,11 @@ public class SearchFragment extends Fragment implements SearchViewInterface, OnT
         searchResultRecyclerView.setAdapter(searchResultAdapter);
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(this.getContext(), DividerItemDecoration.VERTICAL);
         searchResultRecyclerView.addItemDecoration(dividerItemDecoration);
-        searchPresenter.getCategories();
-        searchPresenter.getIngredients();
-        searchPresenter.getAreas();
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
+                shimmerFrameLayout.showShimmer(true);
+                placeHolder.setVisibility(View.VISIBLE);
                 searchPresenter.searchMeal(query);
                 hideSoftKeyBoard();
                 return true;
@@ -109,17 +113,19 @@ public class SearchFragment extends Fragment implements SearchViewInterface, OnT
     @Override
     public void showSearchResult(List<Object> searchedMeals) {
         if (searchedMeals == null || searchedMeals.isEmpty()) {
-//            Toast.makeText(getContext(), "No search results found", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "No search results found", Toast.LENGTH_SHORT).show();
+            searchResultTv.setText(R.string.no_results);
         } else {
-//            Toast.makeText(this.getContext(), "Search Done", Toast.LENGTH_SHORT).show();
-//            searchResultTv.setVisibility(View.VISIBLE);
-            for (Object o : searchedMeals){
-                Log.i("searchedMeals:", o.toString());
-            }
-            searchResultAdapter.setItemList(searchedMeals);
-            searchResultAdapter.notifyDataSetChanged();
+            searchResultTv.setText(R.string.searchResult);
+            placeHolder.setVisibility(View.GONE);
         }
+        searchResultAdapter.setItemList(searchedMeals);
+        searchResultAdapter.notifyDataSetChanged();
+        shimmerFrameLayout.stopShimmer();
+        shimmerFrameLayout.hideShimmer();
+        searchResultTv.setVisibility(View.VISIBLE);
     }
+
 
     private void navToAreas(View view) {
         Navigation.findNavController(view).navigate(R.id.areasFragment);

@@ -13,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.foodflow.R;
 import com.example.foodflow.core.view.OnThumbnailClickListener;
 import com.example.foodflow.models.Ingredient;
@@ -58,7 +59,7 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
     public void onBindViewHolder(@NonNull ViewHolder holder, @SuppressLint("RecyclerView") int position) {
         Ingredient ingredient = ingredients.get(position);
         holder.ingredientTitle.setText(ingredient.getName());
-//        Glide.with(context).load(meal.getStrCategoryThumb()).into(holder.areaThumbnail);
+        Glide.with(context).load(ingredient.getThumbUrl()).into(holder.ingredientThumbnail);
         holder.ingredientThumbnail.setOnClickListener(v -> {
             onMealThumbClickListener.onImageClick(v, ingredient.getName());
         });

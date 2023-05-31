@@ -36,4 +36,9 @@
     <string name="searchByCategory">Explore Categories</string>
     <string name="searchbar_hint">Search Meals</string>
     <string name="searchResult">Search Result</string>
+    <string name="ingredients_header">Select Ingredient to view Meals included</string>
+    <string name="areas_header">Select Area to get Meals</string>
+    <string name="no_results">No Results</string>
+    <string name="ingredient_thumb_extension">-Small.png</string>
+    <string name="ingredient_base_url">https://www.themealdb.com/images/ingredients/</string>
 </resources>

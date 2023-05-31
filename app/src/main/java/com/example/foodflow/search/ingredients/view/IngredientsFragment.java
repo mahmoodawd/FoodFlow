@@ -1,15 +1,18 @@
 package com.example.foodflow.search.ingredients.view;
 
+import android.content.Context;
 import android.os.Bundle;
 
+import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 
 import com.example.foodflow.R;
 import com.example.foodflow.core.view.OnThumbnailClickListener;
@@ -21,12 +24,16 @@ import com.example.foodflow.search.ingredients.presenter.IngredientsPresenter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 public class IngredientsFragment extends Fragment implements IngredientsViewInterface, OnThumbnailClickListener {
     RecyclerView ingredientRecyclerView;
     IngredientsAdapter ingredientsAdapter;
     IngredientsPresenter ingredientsPresenter;
+    List<Ingredient> newIngredientList;
+    SearchView searchView;
+
 
     public IngredientsFragment() {
         // Required empty public constructor
@@ -40,14 +47,31 @@ public class IngredientsFragment extends Fragment implements IngredientsViewInte
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_ingredients, container, false);
+        ingredientRecyclerView = view.findViewById(R.id.ingredientsRecyclerView);
+        searchView = view.findViewById(R.id.ingredientSearchView);
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                hideSoftKeyBoard();
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                filterByIngredient(newText);
+                return false;
+            }
+        });
+
+
         ingredientsPresenter = new IngredientsPresenter(this, Repository.
                 getInstance(this.getContext(), API_Client.getInstance(),
                         ConcreteLocalSource.getInstance(this.getContext())));
-        View view = inflater.inflate(R.layout.fragment_ingredients, container, false);
-        ingredientRecyclerView = view.findViewById(R.id.ingredientsRecyclerView);
-        LinearLayoutManager ingredientLayoutManager = new LinearLayoutManager(this.getContext());
-        ingredientLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
-        ingredientsAdapter = new IngredientsAdapter(this.getContext(), new ArrayList<>(), this);
+        newIngredientList = new ArrayList<>();
+        StaggeredGridLayoutManager ingredientLayoutManager = new StaggeredGridLayoutManager(3, RecyclerView.VERTICAL);
+        ingredientsAdapter = new IngredientsAdapter(this.getContext(), newIngredientList, this);
         ingredientRecyclerView.setHasFixedSize(true);
         ingredientRecyclerView.setLayoutManager(ingredientLayoutManager);
         ingredientRecyclerView.setAdapter(ingredientsAdapter);
@@ -59,6 +83,15 @@ public class IngredientsFragment extends Fragment implements IngredientsViewInte
     @Override
     public void displayIngredients(List<Ingredient> ingredientList) {
         ingredientsAdapter.setIngredients(ingredientList);
+        ingredientsAdapter.notifyDataSetChanged();
+        newIngredientList = ingredientList;
+    }
+
+    private void filterByIngredient(String ingredientName) {
+        List<Ingredient> list = newIngredientList.stream()
+                .filter(s -> s.getName().toLowerCase().contains(ingredientName.toLowerCase()))
+                .collect(Collectors.toList());
+        ingredientsAdapter.setIngredients(list);
         ingredientsAdapter.notifyDataSetChanged();
     }
 
@@ -73,5 +106,11 @@ public class IngredientsFragment extends Fragment implements IngredientsViewInte
     @Override
     public void onImageClick(View view, String ingredientName) {
         showIngredientMeals(view, ingredientName);
+    }
+
+    private void hideSoftKeyBoard() {
+        // Hide the keyboard
+        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
     }
 }

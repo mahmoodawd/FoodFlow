@@ -3,7 +3,6 @@ package com.example.foodflow.repositories;
 
 import androidx.lifecycle.LiveData;
 
-import com.example.foodflow.db.PlannerMealDoa;
 import com.example.foodflow.models.Meal;
 import com.example.foodflow.models.PlannerMeal;
 import com.example.foodflow.network.NetworkDelegate;
@@ -34,9 +33,9 @@ public interface RepositoryInterface {
 
     LiveData<List<Meal>> getFavoritesMeals();
 
-    void insert(Meal meal);
+    void insertIntoFavorites(Meal meal);
 
-    void delete(Meal meal);
+    void deleteFromFavorites(Meal meal);
 
     LiveData<List<PlannerMeal>> getDayMeals(String weekDay);
 

@@ -1,14 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".search.areas.view.AreasFragment">
+    <TextView
+        style="@style/TextAppearance.Material3.HeadlineMedium"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="32dp"
+        android:elevation="@dimen/cardview_default_radius"
+        android:text="@string/areas_header" />
 
     <androidx.recyclerview.widget.RecyclerView
+        android:layout_gravity="center"
         android:id="@+id/areasRecyclerView"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -16,4 +26,4 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:listitem="@layout/area_layout" />
 
-</FrameLayout>
+</LinearLayout>

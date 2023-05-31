@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -48,8 +49,7 @@ public class CategoriesFragment extends Fragment implements CategoriesViewInterf
         categoriesPresenter = new CategoriesPresenter(this, Repository.
                 getInstance(this.getContext(), API_Client.getInstance(),
                         ConcreteLocalSource.getInstance(this.getContext())));
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this.getContext());
-        layoutManager.setOrientation(RecyclerView.HORIZONTAL);
+        StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         categoriesAdapter = new CategoriesAdapter(this.getContext(), new ArrayList<>(), this);
         categoryRecyclerView.setHasFixedSize(true);
         categoryRecyclerView.setLayoutManager(layoutManager);

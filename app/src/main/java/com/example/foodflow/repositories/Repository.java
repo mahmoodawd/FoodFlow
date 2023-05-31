@@ -90,12 +90,12 @@ public class Repository implements RepositoryInterface {
     }
 
     @Override
-    public void insert(Meal meal) {
+    public void insertIntoFavorites(Meal meal) {
         concreteLocalSource.insert(meal);
     }
 
     @Override
-    public void delete(Meal meal) {
+    public void deleteFromFavorites(Meal meal) {
         concreteLocalSource.delete(meal);
     }
 

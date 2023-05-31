@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -49,8 +50,7 @@ public class AreasFragment extends Fragment implements AreasViewInterface, OnThu
         areasPresenter = new AreasPresenter(this, Repository.
                 getInstance(this.getContext(), API_Client.getInstance(),
                         ConcreteLocalSource.getInstance(this.getContext())));
-        LinearLayoutManager areaLayoutManager = new LinearLayoutManager(this.getContext());
-        areaLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
+        StaggeredGridLayoutManager areaLayoutManager = new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL);
         areasAdapter = new AreasAdapter(this.getContext(), new ArrayList<>(), this);
         areaRecyclerView.setHasFixedSize(true);
         areaRecyclerView.setLayoutManager(areaLayoutManager);

@@ -8,20 +8,17 @@
     app:cardElevation="4dp"
     app:cardUseCompatPadding="true">
 
-
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/area_image_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_margin="8dp"
         android:scaleType="centerCrop"
+        app:civ_border_width="10dp"
+        android:padding="16dp"
         android:src="@drawable/ic_launcher_foreground"
         app:civ_border_color="#FFFFFF"
-        app:civ_border_width="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
