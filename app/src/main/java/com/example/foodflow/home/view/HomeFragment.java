@@ -102,12 +102,6 @@ public class HomeFragment extends Fragment implements MealsViewInterface, OnThum
 
     @Override
     public void onFavClick(boolean isChecked, Meal meal) {
-//        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-//
-//        if (user == null) {
-//            Toast.makeText(this.getContext(), "Please, Join to get Full Features",
-//                    Toast.LENGTH_LONG).show();
-//        } else {
         if (isChecked) {
             addToFavourites(meal);
             Toast.makeText(this.getContext(), "Meal added to Favorites",
@@ -116,7 +110,6 @@ public class HomeFragment extends Fragment implements MealsViewInterface, OnThum
             deleteFromFavorites(meal);
             Toast.makeText(this.getContext(), "Meal Removed from Favorites",
                     Toast.LENGTH_SHORT).show();
-//            }
         }
     }
 }

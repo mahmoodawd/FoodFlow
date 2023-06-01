@@ -27,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView userName;
     private ImageView userAvatar;
     private FirebaseUser user;
+    private boolean isUserAtHome;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,16 +47,21 @@ public class MainActivity extends AppCompatActivity {
         navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
             if (bottomNavigationChildren.contains(destination.getId())) {
                 bottomNavigationView.setVisibility(View.VISIBLE);
+
             } else {
                 bottomNavigationView.setVisibility(View.GONE);
             }
 
+
+            //Only show user info for logged in users
             if (destination.getId() == R.id.homeFragment && user != null) {
                 userName.setVisibility(View.VISIBLE);
                 userAvatar.setVisibility(View.VISIBLE);
+                isUserAtHome = true;
             } else {
                 userName.setVisibility(View.GONE);
                 userAvatar.setVisibility(View.GONE);
+                isUserAtHome = false;
             }
         });
         NavigationUI.setupWithNavController(bottomNavigationView, navController);
@@ -63,16 +69,18 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
-        if (user == null) {
-            Intent intent = new Intent(this, WelcomeActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
-            finish();
-
+        if (isUserAtHome) {
+            if (user == null) {
+                Intent intent = new Intent(this, WelcomeActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+                finish();
+            } else {
+                finishAffinity();
+                System.exit(0);
+            }
         } else {
-            finishAffinity();
-            System.exit(0);
+            super.onBackPressed();
         }
     }
 
@@ -87,6 +95,7 @@ public class MainActivity extends AppCompatActivity {
             userAvatar.setVisibility(View.GONE);
         }
     }
+
 
     private void navToProfile() {
         Intent intent = new Intent(this, ProfileActivity.class);
