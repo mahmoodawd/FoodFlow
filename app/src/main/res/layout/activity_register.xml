@@ -4,117 +4,127 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:backgroundTint="@color/theme_light_onPrimary"
+    android:backgroundTintMode="multiply"
     tools:context=".auth.view.RegisterActivity">
+
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="200dp"
-        android:layout_height="121dp"
-        android:layout_marginTop="64dp"
-        android:layout_marginEnd="104dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
         android:foregroundGravity="center"
         android:src="@drawable/spoon_knife"
+        app:layout_constraintBottom_toTopOf="@+id/relativeLayout"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/greyView" />
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.5" />
 
-    <View
-        android:id="@+id/greyView"
-        style="@style/greyBox"
+    <RelativeLayout
+        android:id="@+id/relativeLayout"
+        style="@style/inputFieldContainer"
+        android:layout_marginBottom="11dp"
+        app:layout_constraintBottom_toTopOf="@+id/relativeLayout2"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent">
 
-    <View
-        android:id="@+id/whiteView"
-        style="@style/whiteBox"
-        android:layout_width="408dp"
-        android:layout_height="516dp"
-        android:layout_marginTop="28dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+        <EditText
+            android:id="@+id/userNameField"
+            style="@style/inputField"
+            android:hint="@string/username" />
 
-    <TextView
-        android:id="@+id/tvEmail"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="48dp"
+        <ImageView
+            style="@style/leadingIcon"
+            android:src="@drawable/ic_person" />
+    </RelativeLayout>
 
-        android:text="@string/email"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/greyView" />
+    <RelativeLayout
+        android:id="@+id/relativeLayout2"
+        style="@style/inputFieldContainer"
 
-    <EditText
-        android:id="@+id/emailField"
-        style="@style/inputField"
-        android:layout_marginTop="28dp"
-        android:hint="@string/emailHint"
-        android:inputType="textEmailAddress"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvEmail" />
+        android:layout_marginBottom="11dp"
+        app:layout_constraintBottom_toTopOf="@+id/relativeLayout3"
+        app:layout_constraintStart_toEndOf="@+id/relativeLayout">
 
-    <TextView
-        android:id="@+id/tvPassword"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/password"
-        app:layout_constraintStart_toStartOf="@+id/tvEmail"
-        app:layout_constraintTop_toBottomOf="@+id/emailField" />
+        <EditText
+            android:id="@+id/emailField"
+            style="@style/inputField"
+            android:hint="@string/emailHint"
+            android:inputType="textEmailAddress" />
 
-    <EditText
-        android:id="@+id/passwordField"
-        style="@style/inputField"
-        android:inputType="textPassword"
-        app:layout_constraintStart_toStartOf="@+id/emailField"
-        app:layout_constraintTop_toBottomOf="@+id/tvPassword" />
+        <ImageView
+            style="@style/leadingIcon"
+            android:src="@drawable/ic_email" />
+    </RelativeLayout>
 
-    <TextView
-        android:id="@+id/tvPasswordConfirm"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/passwordConfirm"
-        app:layout_constraintStart_toStartOf="@+id/tvPassword"
-        app:layout_constraintTop_toBottomOf="@+id/passwordField" />
+    <RelativeLayout
+        android:id="@+id/relativeLayout3"
+        style="@style/inputFieldContainer"
 
-    <EditText
-        android:id="@+id/confirmPasswordField"
-        style="@style/inputField"
-        android:inputType="textPassword"
-        app:layout_constraintStart_toStartOf="@+id/passwordField"
-        app:layout_constraintTop_toBottomOf="@+id/tvPasswordConfirm" />
+        android:layout_marginBottom="10dp"
+        app:layout_constraintBottom_toTopOf="@+id/relativeLayout6"
+        app:layout_constraintStart_toEndOf="@+id/relativeLayout2">
+
+        <EditText
+            android:id="@+id/passwordField"
+            style="@style/inputField"
+            android:hint="@string/password"
+            android:inputType="textPassword" />
+
+        <ImageView
+            style="@style/leadingIcon"
+            android:src="@drawable/ic_password" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/relativeLayout6"
+        style="@style/inputFieldContainer"
+        android:layout_marginBottom="11dp"
+        app:layout_constraintBottom_toTopOf="@+id/signUpButton"
+        app:layout_constraintStart_toEndOf="@+id/relativeLayout3">
+
+        <EditText
+            android:id="@+id/confirmPasswordField"
+            style="@style/inputField"
+            android:hint="@string/passwordConfirm"
+            android:inputType="textPassword" />
+
+        <ImageView
+            style="@style/leadingIcon"
+            android:src="@drawable/ic_password" />
+    </RelativeLayout>
 
 
     <Button
         android:id="@+id/signUpButton"
         style="@style/activeBtnStyle"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="60dp"
+        android:layout_marginBottom="11dp"
         android:text="@string/signup"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/confirmPasswordField" />
+        app:layout_constraintBottom_toTopOf="@+id/btnGoogleSignIn"
+        app:layout_constraintStart_toEndOf="@+id/relativeLayout6" />
 
-
-
-    <com.google.android.gms.common.SignInButton
+    <Button
         android:id="@+id/btnGoogleSignIn"
-        style="@style/activeBtnStyle"
-        android:textAlignment="center"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/signUpButton" />
+        style="@style/googleBtn"
+        android:layout_marginBottom="11dp"
+        app:layout_constraintBottom_toTopOf="@+id/navToLoginTv"
+        app:layout_constraintStart_toEndOf="@+id/signUpButton" />
 
     <TextView
         android:id="@+id/navToLoginTv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="120dp"
-        android:layout_marginTop="16dp"
+        style="@style/hyperLink"
         android:text="@string/navToLogin"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnGoogleSignIn"
-        app:layout_constraintVertical_bias="0.176" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+
+

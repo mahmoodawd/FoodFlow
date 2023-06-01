@@ -16,6 +16,17 @@
         android:padding="8dp"
         android:text="@string/favorites" />
 
+    <TextView
+        android:id="@+id/guestPrompt"
+        android:visibility="gone"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:textAppearance="@style/TextAppearance.Material3.HeadlineLarge"
+        android:textAlignment="center"
+        android:text="@string/guestPrompt"
+        android:layout_gravity="center"/>
+
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/mealsRecyclerView"
         android:layout_width="match_parent"

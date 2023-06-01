@@ -1,10 +1,8 @@
 package com.example.foodflow.auth.view;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -13,39 +11,41 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.foodflow.R;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.foodflow.MainActivity;
-import com.google.android.gms.auth.api.identity.BeginSignInRequest;
-import com.google.android.gms.auth.api.identity.SignInClient;
+import com.example.foodflow.R;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
+import com.google.firebase.auth.FirebaseAuthInvalidUserException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.auth.UserProfileChangeRequest;
+
+import java.util.Objects;
 
 public class RegisterActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
-    private String TAG = "AUTH_RESULT";
+    private final String TAG = "AUTH_RESULT";
     private Button signUpBtn;
     public static final int RC_SIGN_IN = 321;
-    private SignInButton btnSignInWithGoogle;
+    private Button btnSignInWithGoogle;
     private GoogleSignInClient mGoogleSignInClient;
     EditText email;
     EditText password;
+    EditText confirmPassword;
+    EditText userName;
     TextView navToLogin;
-
-    private BeginSignInRequest signUpRequest;
-    private static final int REQ_ONE_TAP = 2;  // Can be any integer unique to the Activity.
-    private boolean showOneTapUI = true;
-    private SignInClient oneTapClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,18 +55,26 @@ public class RegisterActivity extends AppCompatActivity {
         btnSignInWithGoogle = findViewById(R.id.btnGoogleSignIn);
         email = findViewById(R.id.emailField);
         password = findViewById(R.id.passwordField);
+        confirmPassword = findViewById(R.id.confirmPasswordField);
+        userName = findViewById(R.id.userNameField);
         navToLogin = findViewById(R.id.navToLoginTv);
 
         mAuth = FirebaseAuth.getInstance();
         requestGoogleSignIn();
 
-        btnSignInWithGoogle.setOnClickListener(view -> {
-            signInWithGoogle();
-        });
+        btnSignInWithGoogle.setOnClickListener(view -> signInWithGoogle());
         signUpBtn.setOnClickListener(v -> {
-            if (TextUtils.isEmpty(email.getText()) || TextUtils.isEmpty(password.getText())) {
-                Toast.makeText(RegisterActivity.this, "Email and Password can't be left blank", Toast.LENGTH_SHORT).show();
-            } else createAccount(email.getText().toString(), password.getText().toString());
+            if (areFieldsValid()) {
+                if (isPasswordsMatch()) {
+
+                    createAccount(userName.getText().toString(), email.getText().toString(), password.getText().toString());
+                } else {
+
+                    Toast.makeText(RegisterActivity.this, "Passwords don't match", Toast.LENGTH_SHORT).show();
+                }
+            } else {
+                Toast.makeText(RegisterActivity.this, "Please, Fill all fields", Toast.LENGTH_SHORT).show();
+            }
         });
 
         navToLogin.setOnClickListener(v -> {
@@ -74,31 +82,69 @@ public class RegisterActivity extends AppCompatActivity {
         });
     }
 
-    void createAccount(String email, String password) {
+    private boolean areFieldsValid() {
+        return !TextUtils.isEmpty(email.getText()) &&
+                !TextUtils.isEmpty(password.getText()) &&
+                !TextUtils.isEmpty(userName.getText());
+    }
 
-        mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if (task.isSuccessful()) {
-                    // Sign in success, update UI with the signed-in user's information
-                    Log.d(TAG, "createUserWithEmail:success");
-                    FirebaseUser user = mAuth.getCurrentUser();
-                    Toast.makeText(RegisterActivity.this, "U R Welcome.", Toast.LENGTH_SHORT).show();
-                    navigate(MainActivity.class);
-                } else {
-                    // If sign in fails, display a message to the user.
-                    Log.w(TAG, "createUserWithEmail:failure", task.getException());
-                    Toast.makeText(RegisterActivity.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
+    private boolean isPasswordsMatch() {
+        return password.getText().toString().equals(confirmPassword.getText().toString());
+    }
+
+    void createAccount(String username, String email, String password) {
+        mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, task -> {
+            if (task.isSuccessful()) {
+                // Sign in success, update UI with the signed-in user's information
+                Log.d(TAG, "createUserWithEmail:success");
+                FirebaseUser user = mAuth.getCurrentUser();
+
+                if (user != null) {
+
+                    UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                            .setDisplayName(username).setPhotoUri(Uri.parse("https://cdn4.iconfinder.com/data/icons/green-shopper/1068/user.png"))
+                            .build();
+                    user.updateProfile(profileUpdates)
+                            .addOnCompleteListener(task1 -> {
+                                if (task1.isSuccessful()) {
+                                    Log.d(TAG, "User profile updated.");
+                                    finish();
+                                    navigate(MainActivity.class);
+                                }
+                            });
+
+//                    user.sendEmailVerification().addOnCompleteListener(sendVerifyEmailTask -> {
+//
+//                    });
                 }
+            } else {
+                // If sign in fails, display a message to the user.
+                Log.w(TAG, "createUserWithEmail:failure", task.getException());
+
+                Toast.makeText(RegisterActivity.this, getUserErrorMessage(task), Toast.LENGTH_LONG).show();
             }
         });
     }
 
+    String getUserErrorMessage(Task<AuthResult> task) {
+        String errorMessage;
+        if (task.getException() instanceof FirebaseAuthInvalidUserException) {
+            // Invalid email address
+            errorMessage = "Invalid email address. Please try again.";
+        } else if (task.getException() instanceof FirebaseAuthInvalidCredentialsException) {
+            // Invalid password
+            errorMessage = "Invalid password. Please try again.";
+        } else {
+            // Other error
+            errorMessage = "Authentication failed. Please try again.";
+        }
+        return errorMessage;
+    }
 
     private void requestGoogleSignIn() {
         // Configure sign-in to request the user’s basic profile like name and email
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestIdToken("719276620910-28306ej300ssu0fmvccki1jm5a81cm30.apps.googleusercontent.com")
                 .requestEmail()
                 .build();
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
@@ -122,7 +168,6 @@ public class RegisterActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             Log.d(TAG, "signInWithCredential:success");
 
-                            // Sign in success, navigate user to Profile Activity
                             navigate(MainActivity.class);
                         } else {
                             // If sign in fails, display a message to the user.
@@ -133,38 +178,19 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-        FirebaseUser user = mAuth.getCurrentUser();
-        if (user != null) {
-            startActivity(new Intent(getApplicationContext(), MainActivity.class));
-        }
-    }
-
-    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
         if (requestCode == RC_SIGN_IN) {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             try {
-                // Google Sign In was successful, authenticate with Firebase
                 GoogleSignInAccount account = task.getResult(ApiException.class);
-                //authenticating user with firebase using received token id
                 firebaseAuthWithGoogle(account.getIdToken());
-                //assigning user information to variables
                 String userName = account.getDisplayName();
                 String userEmail = account.getEmail();
                 String userPhoto = account.getPhotoUrl().toString();
-                userPhoto = userPhoto + "?type=large";
-                //create sharedPreference to store user data when user signs in successfully
-                SharedPreferences.Editor editor = getApplicationContext()
-                        .getSharedPreferences("MyPrefs", MODE_PRIVATE)
-                        .edit();
-                editor.putString("username", userName);
-                editor.putString("useremail", userEmail);
-                editor.putString("userPhoto", userPhoto);
-                editor.apply();
+                storeUserCredentials(userName, userEmail, userPhoto);
+
                 Log.i(TAG, "onActivityResult: Success");
             } catch (ApiException e) {
                 Log.e(TAG, "onActivityResult: " + e.getMessage());
@@ -172,8 +198,22 @@ public class RegisterActivity extends AppCompatActivity {
         }
     }
 
+    private void storeUserCredentials(String userName, String userEmail, String userPhoto) {
+        userPhoto = userPhoto + "?type=large";
+        //create sharedPreference to store user data when user signs in successfully
+        SharedPreferences.Editor editor = getApplicationContext()
+                .getSharedPreferences("MyPrefs", MODE_PRIVATE)
+                .edit();
+        editor.putString("username", userName);
+        editor.putString("useremail", userEmail);
+        editor.putString("userPhoto", userPhoto);
+        editor.apply();
+    }
+
     void navigate(Class<?> cls) {
         Intent intent = new Intent(RegisterActivity.this, cls);
         startActivity(intent);
     }
+
+
 }

@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.example.foodflow.R;
 import com.example.foodflow.core.view.OnThumbnailClickListener;
@@ -20,6 +21,8 @@ import com.example.foodflow.network.API_Client;
 import com.example.foodflow.models.WeekDay;
 import com.example.foodflow.planner.presenter.PlannerPresenter;
 import com.example.foodflow.repositories.Repository;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.time.DayOfWeek;
 import java.util.ArrayList;
@@ -30,6 +33,7 @@ public class PlannerFragment extends Fragment implements PlannerViewInterface, O
 
     PlannerPresenter plannerPresenter;
     RecyclerView weekDaysRecyclerView;
+    TextView guestPrompt;
     WeekDaysAdapter weekDaysAdapter;
     List<WeekDay> weekDays;
     List<PlannerMeal> saturdayMeals;
@@ -54,7 +58,7 @@ public class PlannerFragment extends Fragment implements PlannerViewInterface, O
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_planner, container, false);
         weekDaysRecyclerView = view.findViewById(R.id.weekDaysRecyclerView);
-
+        guestPrompt = view.findViewById(R.id.guestPrompt);
         initDays();
         initWeekDays();
 
@@ -95,40 +99,47 @@ public class PlannerFragment extends Fragment implements PlannerViewInterface, O
 
     @Override
     public void displayMeals(List<PlannerMeal> plannerMeals) {
-        clearLists();
-        for (PlannerMeal meal : plannerMeals) {
-            String weekDay = meal.getWeekDay();
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
-            if (weekDay.equalsIgnoreCase(DayOfWeek.SATURDAY.name())) {
-                saturdayMeals.add(meal);
+        if (user == null) {
+            guestPrompt.setVisibility(View.VISIBLE);
+        } else {
 
+            clearLists();
+            for (PlannerMeal meal : plannerMeals) {
+                String weekDay = meal.getWeekDay();
+
+                if (weekDay.equalsIgnoreCase(DayOfWeek.SATURDAY.name())) {
+                    saturdayMeals.add(meal);
+
+                }
+                if (weekDay.equalsIgnoreCase(DayOfWeek.SUNDAY.name())) {
+                    sundayMeals.add(meal);
+
+                }
+                if (weekDay.equalsIgnoreCase(DayOfWeek.MONDAY.name())) {
+                    mondayMeals.add(meal);
+
+                }
+                if (weekDay.equalsIgnoreCase(DayOfWeek.TUESDAY.name())) {
+                    tuesdayMeals.add(meal);
+
+                }
+                if (weekDay.equalsIgnoreCase(DayOfWeek.WEDNESDAY.name())) {
+                    wednesdayMeals.add(meal);
+
+                }
+                if (weekDay.equalsIgnoreCase(DayOfWeek.THURSDAY.name())) {
+                    thursdayMeals.add(meal);
+
+                }
+                if (weekDay.equalsIgnoreCase(DayOfWeek.FRIDAY.name())) {
+                    fridayMeals.add(meal);
+
+                }
             }
-            if (weekDay.equalsIgnoreCase(DayOfWeek.SUNDAY.name())) {
-                sundayMeals.add(meal);
-
-            }
-            if (weekDay.equalsIgnoreCase(DayOfWeek.MONDAY.name())) {
-                mondayMeals.add(meal);
-
-            }
-            if (weekDay.equalsIgnoreCase(DayOfWeek.TUESDAY.name())) {
-                tuesdayMeals.add(meal);
-
-            }
-            if (weekDay.equalsIgnoreCase(DayOfWeek.WEDNESDAY.name())) {
-                wednesdayMeals.add(meal);
-
-            }
-            if (weekDay.equalsIgnoreCase(DayOfWeek.THURSDAY.name())) {
-                thursdayMeals.add(meal);
-
-            }
-            if (weekDay.equalsIgnoreCase(DayOfWeek.FRIDAY.name())) {
-                fridayMeals.add(meal);
-
-            }
+            weekDaysAdapter.setDayList(weekDays);
         }
-        weekDaysAdapter.setDayList(weekDays);
     }
 
     private void clearLists() {

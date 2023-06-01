@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.foodflow.core.view.OnFavIconClickListener;
 import com.facebook.shimmer.ShimmerFrameLayout;
@@ -23,7 +24,11 @@ import com.example.foodflow.models.Meal;
 import com.example.foodflow.network.API_Client;
 import com.example.foodflow.core.presenter.MealsPresenter;
 import com.example.foodflow.repositories.Repository;
+import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -97,10 +102,21 @@ public class HomeFragment extends Fragment implements MealsViewInterface, OnThum
 
     @Override
     public void onFavClick(boolean isChecked, Meal meal) {
+//        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+//
+//        if (user == null) {
+//            Toast.makeText(this.getContext(), "Please, Join to get Full Features",
+//                    Toast.LENGTH_LONG).show();
+//        } else {
         if (isChecked) {
             addToFavourites(meal);
+            Toast.makeText(this.getContext(), "Meal added to Favorites",
+                    Toast.LENGTH_SHORT).show();
         } else {
             deleteFromFavorites(meal);
+            Toast.makeText(this.getContext(), "Meal Removed from Favorites",
+                    Toast.LENGTH_SHORT).show();
+//            }
         }
     }
 }

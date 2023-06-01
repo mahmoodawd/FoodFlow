@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
@@ -17,6 +18,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.foodflow.R;
 import com.example.foodflow.models.Meal;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -65,7 +68,17 @@ public class MealsAdapter extends RecyclerView.Adapter<MealsAdapter.ViewHolder> 
             onMealThumbClickListener.onImageClick(v, meal.getIdMeal());
         });
 
-        holder.addToFavorites.setOnCheckedChangeListener((buttonView, isChecked) -> onFavIconClickListener.onFavClick(isChecked, meal));
+        holder.addToFavorites.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+            if (user == null) {
+                Toast.makeText(context, "Please, Join to get Full Features",
+                        Toast.LENGTH_LONG).show();
+                holder.addToFavorites.setChecked(false);
+            } else {
+                onFavIconClickListener.onFavClick(isChecked, meal);
+            }
+        });
 
         Log.i(TAG, "onBindViewHolder");
     }

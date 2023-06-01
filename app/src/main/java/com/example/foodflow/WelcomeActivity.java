@@ -1,50 +1,44 @@
 package com.example.foodflow;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.viewpager.widget.ViewPager;
-
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
 import android.widget.Button;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.foodflow.auth.view.RegisterActivity;
-import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class WelcomeActivity extends AppCompatActivity {
-    private ViewPager mViewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Button joinBtn;
+        Button guestBtn;
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
         joinBtn = findViewById(R.id.joinButton);
+        guestBtn = findViewById(R.id.guestButton);
 
-//        mViewPager = (ViewPager) findViewById(R.id.container);
-//        setupViewPager(mViewPager);
-//
-//        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
-//        tabLayout.setupWithViewPager(mViewPager);
-//
-//        joinBtn = findViewById(R.id.joinButton);
-//        joinBtn.setOnClickListener(v -> {
-//            final BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(
-//                    WelcomeActivity.this);
-//            View bottomSheetView = LayoutInflater.from(getApplicationContext())
-//                    . inflate(R.layout.modal_bottom_sheet,
-//                            (ConstraintLayout) findViewById(R.id.modalBottomSheetContainer));
-//            bottomSheetDialog.setContentView(bottomSheetView);
-//            bottomSheetDialog.show();
-//
-//        });
+        joinBtn.setOnClickListener(v -> navigate(RegisterActivity.class));
+        guestBtn.setOnClickListener(v -> navigate(MainActivity.class));
+    }
 
-        joinBtn.setOnClickListener(v -> {
-            Intent intent = new Intent(WelcomeActivity.this, RegisterActivity.class);
-            startActivity(intent);
-        });
+    private void navigate(Class<?> destinationActivity) {
+        Intent intent = new Intent(WelcomeActivity.this, destinationActivity);
+        startActivity(intent);
+    }
+
+    @Override
+    protected void onStart() {
+        FirebaseAuth mAuth;
+        mAuth = FirebaseAuth.getInstance();
+        super.onStart();
+        FirebaseUser user = mAuth.getCurrentUser();
+        if (user != null) {
+            startActivity(new Intent(getApplicationContext(), MainActivity.class));
+        }
     }
 }

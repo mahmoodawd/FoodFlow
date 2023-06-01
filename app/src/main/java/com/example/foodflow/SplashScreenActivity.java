@@ -26,13 +26,10 @@ public class SplashScreenActivity extends AppCompatActivity {
 
         nameSlogan.animate().translationX(0).setDuration(2000).setStartDelay(4000);
         lottieAnimationView.animate().translationY(-35).setDuration(2000).setStartDelay(5000);
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-
-                Intent intent = new Intent(getApplicationContext(), WelcomeActivity.class);
-                startActivity(intent);
-            }
+        new Handler().postDelayed(() -> {
+            finish();
+            Intent intent = new Intent(getApplicationContext(), WelcomeActivity.class);
+            startActivity(intent);
         }, 10000);
     }
 }

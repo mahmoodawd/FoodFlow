@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.example.foodflow.R;
 import com.example.foodflow.core.presenter.MealsPresenter;
@@ -24,6 +25,8 @@ import com.example.foodflow.models.PlannerMeal;
 import com.example.foodflow.network.API_Client;
 import com.example.foodflow.planner.view.OnDelIconClickListener;
 import com.example.foodflow.repositories.Repository;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +35,7 @@ public class FavoritesFragment extends Fragment implements MealsViewInterface, O
     RecyclerView mealsRecyclerView;
     FavoritesMealsAdapter mealsAdapter;
     MealsPresenter mealsPresenter;
+    TextView guestPrompt;
 
     public FavoritesFragment() {
         // Required empty public constructor
@@ -48,6 +52,7 @@ public class FavoritesFragment extends Fragment implements MealsViewInterface, O
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_favorites, container, false);
         mealsRecyclerView = view.findViewById(R.id.mealsRecyclerView);
+        guestPrompt = view.findViewById(R.id.guestPrompt);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this.getContext());
         layoutManager.setOrientation(RecyclerView.VERTICAL);
         mealsAdapter = new FavoritesMealsAdapter(this.getContext(), new ArrayList<>(), this, this);
@@ -76,8 +81,14 @@ public class FavoritesFragment extends Fragment implements MealsViewInterface, O
 
     @Override
     public void displayMeals(List<Meal> mealList) {
-        mealsAdapter.setMealsList(mealList);
-        mealsAdapter.notifyDataSetChanged();
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+        if (user == null) {
+            guestPrompt.setVisibility(View.VISIBLE);
+        } else {
+            mealsAdapter.setMealsList(mealList);
+            mealsAdapter.notifyDataSetChanged();
+        }
     }
 
     @Override
