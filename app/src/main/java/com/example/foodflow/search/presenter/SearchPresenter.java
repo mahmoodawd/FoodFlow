@@ -1,5 +1,6 @@
 package com.example.foodflow.search.presenter;
 
+import com.example.foodflow.models.Meal;
 import com.example.foodflow.network.NetworkDelegate;
 import com.example.foodflow.repositories.RepositoryInterface;
 import com.example.foodflow.search.view.SearchViewInterface;
@@ -48,7 +49,15 @@ public class SearchPresenter implements SearchPresenterInterface, NetworkDelegat
         _repo.searchMeals(this, mealName);
     }
 
+    @Override
+    public void addMealToFav(Meal meal) {
+        _repo.insertIntoFavorites(meal);
+    }
 
+    @Override
+    public void deleteMealFromFav(Meal meal) {
+        _repo.deleteFromFavorites(meal);
+    }
 
 
 }

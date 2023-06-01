@@ -8,9 +8,11 @@ import com.example.foodflow.models.Meal;
 import java.util.List;
 
 public interface SearchViewInterface {
-    void showSearchResult(List<Object> searchedMeals);
+    void showSearchResult(List<Meal> searchedMeals);
 
+    void addToFavourites(Meal meal);
 
+    void deleteFromFavorites(Meal meal);
 
 
 }

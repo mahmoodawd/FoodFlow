@@ -20,8 +20,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.foodflow.R;
+import com.example.foodflow.core.view.MealsAdapter;
+import com.example.foodflow.core.view.OnFavIconClickListener;
 import com.example.foodflow.db.ConcreteLocalSource;
 import com.example.foodflow.core.view.OnThumbnailClickListener;
+import com.example.foodflow.models.Meal;
 import com.example.foodflow.network.API_Client;
 import com.example.foodflow.repositories.Repository;
 import com.example.foodflow.search.presenter.SearchPresenter;
@@ -33,10 +36,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class SearchFragment extends Fragment implements SearchViewInterface, OnThumbnailClickListener {
+public class SearchFragment extends Fragment implements SearchViewInterface, OnThumbnailClickListener, OnFavIconClickListener {
 
     RecyclerView searchResultRecyclerView;
-    SearchAdapter searchResultAdapter;
+    MealsAdapter searchResultAdapter;
     SearchView searchView;
     private Button AreasBtn;
     private Button ingredientsBtn;
@@ -85,7 +88,7 @@ public class SearchFragment extends Fragment implements SearchViewInterface, OnT
 
         LinearLayoutManager searchResultLayoutManager = new LinearLayoutManager(this.getContext());
         searchResultLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
-        searchResultAdapter = new SearchAdapter(this.getContext(), new ArrayList<>(), this);
+        searchResultAdapter = new MealsAdapter(this.getContext(), new ArrayList<>(), this, this);
         searchResultRecyclerView.setHasFixedSize(true);
         searchResultRecyclerView.setLayoutManager(searchResultLayoutManager);
         searchResultRecyclerView.setAdapter(searchResultAdapter);
@@ -111,7 +114,7 @@ public class SearchFragment extends Fragment implements SearchViewInterface, OnT
     }
 
     @Override
-    public void showSearchResult(List<Object> searchedMeals) {
+    public void showSearchResult(List<Meal> searchedMeals) {
         if (searchedMeals == null || searchedMeals.isEmpty()) {
             Toast.makeText(getContext(), "No search results found", Toast.LENGTH_SHORT).show();
             searchResultTv.setText(R.string.no_results);
@@ -119,7 +122,7 @@ public class SearchFragment extends Fragment implements SearchViewInterface, OnT
             searchResultTv.setText(R.string.searchResult);
             placeHolder.setVisibility(View.GONE);
         }
-        searchResultAdapter.setItemList(searchedMeals);
+        searchResultAdapter.setMealsList(searchedMeals);
         searchResultAdapter.notifyDataSetChanged();
         shimmerFrameLayout.stopShimmer();
         shimmerFrameLayout.hideShimmer();
@@ -157,5 +160,26 @@ public class SearchFragment extends Fragment implements SearchViewInterface, OnT
         // Hide the keyboard
         InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
+    }
+    @Override
+    public void addToFavourites(Meal meal) {
+        searchPresenter.addMealToFav(meal);
+    }
+
+    @Override
+    public void deleteFromFavorites(Meal meal) {
+        searchPresenter.deleteMealFromFav(meal);
+    }
+    @Override
+    public void onFavClick(boolean isChecked, Meal meal) {
+        if (isChecked) {
+            addToFavourites(meal);
+            Toast.makeText(this.getContext(), "Meal added to Favorites",
+                    Toast.LENGTH_SHORT).show();
+        } else {
+            deleteFromFavorites(meal);
+            Toast.makeText(this.getContext(), "Meal Removed from Favorites",
+                    Toast.LENGTH_SHORT).show();
+        }
     }
 }
