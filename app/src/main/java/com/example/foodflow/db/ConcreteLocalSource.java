@@ -20,7 +20,7 @@ public class ConcreteLocalSource implements LocalSource {
 
     private ConcreteLocalSource(Context context) {
         this.context = context;
-        FavoritesDB db = FavoritesDB.getInstance(context.getApplicationContext());
+        AppDB db = AppDB.getInstance(context.getApplicationContext());
         mealDoa = db.mealDao();
         plannerMealDoa = db.plannerMealDoa();
         storedMeals = mealDoa.getStoredMeals();
