@@ -4,15 +4,15 @@ FoodFlow is an Android app that provide users with a variety of meals to plan th
 
 ## Table of Contents
 
-- [About the Project](#about-the-project)
+- [About FoodFlow](#about-foodflow)
 - [Features](#features)
 - [Screenshots](#screenshots)
 - [Technologies and Libraries Used](#technologies-and-libraries-used)
-- [dependencies](#dependencies)
+- [Dependencies](#dependencies)
 - [Installation](#installation)
 - [Contact](#contact)
 
-## About the Project
+## About FoodFlow
 
 FoodFlow helps users plan their weekly meals by providing them with a list of meals from diffrenet  categories, and areas. With FoodFlow, users can search for meals or filter a list of meals by category, area, or ingredient. The app also has a feature to add a certain meal to favorites, making it easy for users to access their favorite meals whenever they want.
 ## Features
@@ -42,7 +42,7 @@ FoodFlow helps users plan their weekly meals by providing them with a list of me
 - Facebook Shimmer Animation: For displaying loading animations
 - Lottie Animation: For displaying vector animations
 
-## dependencies
+## Dependencies
 
 The FoodFlow app uses the following dependencies:
 
