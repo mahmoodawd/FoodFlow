@@ -1,19 +1,20 @@
 package com.example.foodflow.planner.all_meals.presenter;
 
-import androidx.lifecycle.LifecycleOwner;
+import android.util.Log;
 
 import com.example.foodflow.models.PlannerMeal;
-import com.example.foodflow.network.NetworkDelegate;
 import com.example.foodflow.planner.all_meals.view.AllMealsViewInterface;
-import com.example.foodflow.planner.presenter.PlannerPresenterInterface;
-import com.example.foodflow.planner.view.PlannerViewInterface;
 import com.example.foodflow.repositories.RepositoryInterface;
 
 import java.util.List;
 
-public class AllMealsPresenter implements AllMealsPresenterInterface, NetworkDelegate {
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
+
+public class AllMealsPresenter implements AllMealsPresenterInterface{
     RepositoryInterface _repo;
     AllMealsViewInterface _view;
+    private String TAG = "AllMealsPresenter";
 
     public AllMealsPresenter(RepositoryInterface repo, AllMealsViewInterface view) {
         this._repo = repo;
@@ -28,17 +29,10 @@ public class AllMealsPresenter implements AllMealsPresenterInterface, NetworkDel
 
     @Override
     public void getAllMeals() {
-        _repo.getAllMeals(this);
+        _repo.getAllMeals().subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread()).subscribe(mealsResponse -> _view.displayMeals(mealsResponse.getPlannerMeals()),
+                        throwable -> Log.i(TAG, "Data Retrival Error: " + throwable.getMessage()));
     }
 
 
-    @Override
-    public void onSuccess(List items) {
-        _view.displayMeals(items);
-    }
-
-    @Override
-    public void onFailure(Throwable t) {
-
-    }
 }

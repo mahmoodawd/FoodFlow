@@ -1,13 +1,8 @@
 package com.example.foodflow.network;
 
 
-import android.util.Log;
-
-import androidx.annotation.NonNull;
-
 import com.example.foodflow.models.AreasResponse;
 import com.example.foodflow.models.CategoriesResponse;
-import com.example.foodflow.models.Ingredient;
 import com.example.foodflow.models.IngredientsResponse;
 import com.example.foodflow.models.MealsResponse;
 import com.example.foodflow.models.PlannerMealResponse;
@@ -15,13 +10,12 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import io.reactivex.Single;
 import okhttp3.OkHttpClient;
-import retrofit2.Call;
-import retrofit2.Response;
 import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 
@@ -39,6 +33,7 @@ public class API_Client implements RemoteSource {
         Gson gson = new GsonBuilder().create();
         Retrofit retrofit = new Retrofit.Builder().baseUrl(BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create(gson))
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .client(client)
                 .build();
         apiService = retrofit.create(API_Service.class);
@@ -53,255 +48,55 @@ public class API_Client implements RemoteSource {
 
 
     @Override
-    public void getAllMeals(NetworkDelegate networkDelegate) {
-        Call<PlannerMealResponse> meals = apiService.getAllMeals("");
-        meals.enqueue(new retrofit2.Callback<PlannerMealResponse>() {
-            @Override
-            public void onResponse(@NonNull Call<PlannerMealResponse> call, Response<PlannerMealResponse> response) {
-                Log.i(TAG, "onResponse");
-                assert response.body() != null;
-                Log.i(TAG, String.valueOf(response.body().getPlannerMeals()));
-                if (response.isSuccessful() && response.body() != null) {
-                    networkDelegate.onSuccess(response.body().getPlannerMeals());
-                }
-            }
+    public Single<MealsResponse> getMealOfTheDay() {
 
-            @Override
-            public void onFailure(Call<PlannerMealResponse> call, Throwable t) {
-                Log.i(TAG, "onFailure");
-                Log.e(TAG, t.getMessage());
-                t.printStackTrace();
-                networkDelegate.onFailure(t);
-            }
-        });
+        return apiService.getMealOfTheDay();
     }
 
     @Override
-    public void getMealOfTheDay(NetworkDelegate callback) {
+    public Single<PlannerMealResponse> getAllMeals() {
+        return apiService.getAllMeals("");
+    }
 
-        Call<MealsResponse> meals = apiService.getRandomMeal();
-        meals.enqueue(new retrofit2.Callback<MealsResponse>() {
-            @Override
-            public void onResponse(@NonNull Call<MealsResponse> call, Response<MealsResponse> response) {
-                Log.i(TAG, "onResponse");
-                assert response.body() != null;
-                Log.i(TAG, String.valueOf(response.body().getMeals()));
-                if (response.isSuccessful() && response.body() != null) {
-                    callback.onSuccess(response.body().getMeals());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<MealsResponse> call, Throwable t) {
-                Log.i(TAG, "onFailure");
-                Log.e(TAG, t.getMessage());
-                t.printStackTrace();
-                callback.onFailure(t);
-            }
-        });
+    @Override
+    public Single<MealsResponse> getMealDetails(String mealId) {
+        return apiService.getMealDetails(mealId);
     }
 
 
     @Override
-    public void getMealDetails(NetworkDelegate callback, String mealId) {
-
-        Call<MealsResponse> mealDetails = apiService.getMealDetails(mealId);
-        mealDetails.enqueue(new retrofit2.Callback<MealsResponse>() {
-            @Override
-            public void onResponse(@NonNull Call<MealsResponse> call, Response<MealsResponse> response) {
-                Log.i(TAG, "onResponse");
-                assert response.body() != null;
-                Log.i(TAG, String.valueOf(response.body().getMeals()));
-                if (response.isSuccessful() && response.body() != null) {
-                    callback.onSuccess(response.body().getMeals());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<MealsResponse> call, Throwable t) {
-                Log.i(TAG, "onFailure");
-                Log.e(TAG, t.getMessage());
-                t.printStackTrace();
-                callback.onFailure(t);
-            }
-        });
+    public Single<MealsResponse> searchMeals(String title) {
+        return apiService.getSearchedMeals(title);
     }
 
     @Override
-    public void searchMeals(NetworkDelegate callback, String title) {
-        Call<MealsResponse> meals = apiService.getSearchedMeals(title);
-        meals.enqueue(new retrofit2.Callback<MealsResponse>() {
-            @Override
-            public void onResponse(@NonNull Call<MealsResponse> call, Response<MealsResponse> response) {
-                Log.i(TAG, "onResponse");
-                assert response.body() != null;
-                Log.i(TAG, String.valueOf(response.body().getMeals()));
-                if (response.isSuccessful() && response.body() != null) {
-                    callback.onSuccess(response.body().getMeals());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<MealsResponse> call, Throwable t) {
-                Log.i(TAG, "onFailure");
-                Log.e(TAG, t.getMessage());
-                t.printStackTrace();
-                callback.onFailure(t);
-            }
-        });
-
-
+    public Single<MealsResponse> getMealsByCategory(String category) {
+        return apiService.getMealsByCategory(category);
     }
 
     @Override
-    public void getMealsByCategories(NetworkDelegate callback, String category) {
-
-        Call<MealsResponse> meals = apiService.getMealsByCategory(category);
-        meals.enqueue(new retrofit2.Callback<MealsResponse>() {
-            @Override
-            public void onResponse(@NonNull Call<MealsResponse> call, Response<MealsResponse> response) {
-                Log.i(TAG, "onResponse");
-                assert response.body() != null;
-                Log.i(TAG, String.valueOf(response.body().getMeals()));
-                if (response.isSuccessful() && response.body() != null) {
-                    callback.onSuccess(response.body().getMeals());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<MealsResponse> call, Throwable t) {
-                Log.i(TAG, "onFailure");
-                Log.e(TAG, t.getMessage());
-                t.printStackTrace();
-                callback.onFailure(t);
-            }
-        });
+    public Single<MealsResponse> getMealsByArea(String area) {
+        return apiService.getMealsByArea(area);
     }
 
     @Override
-    public void getMealsByArea(NetworkDelegate callback, String area) {
-        Call<MealsResponse> meals = apiService.getMealsByArea(area);
-        meals.enqueue(new retrofit2.Callback<MealsResponse>() {
-            @Override
-            public void onResponse(@NonNull Call<MealsResponse> call, Response<MealsResponse> response) {
-                Log.i(TAG, "onResponse");
-                assert response.body() != null;
-                Log.i(TAG, String.valueOf(response.body().getMeals()));
-                if (response.isSuccessful() && response.body() != null) {
-                    callback.onSuccess(response.body().getMeals());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<MealsResponse> call, Throwable t) {
-                Log.i(TAG, "onFailure");
-                Log.e(TAG, t.getMessage());
-                t.printStackTrace();
-                callback.onFailure(t);
-            }
-        });
+    public Single<MealsResponse> getMealsByIngredient(String ingredient) {
+        return apiService.getMealsByIngredient(ingredient);
     }
 
     @Override
-    public void getMealsByIngredient(NetworkDelegate callback, String ingredient) {
-        Call<MealsResponse> meals = apiService.getMealsByIngredient(ingredient);
-        meals.enqueue(new retrofit2.Callback<MealsResponse>() {
-            @Override
-            public void onResponse(@NonNull Call<MealsResponse> call, Response<MealsResponse> response) {
-                Log.i(TAG, "onResponse");
-                assert response.body() != null;
-                Log.i(TAG, String.valueOf(response.body().getMeals()));
-                if (response.isSuccessful() && response.body() != null) {
-                    callback.onSuccess(response.body().getMeals());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<MealsResponse> call, Throwable t) {
-                Log.i(TAG, "onFailure");
-                Log.e(TAG, t.getMessage());
-                t.printStackTrace();
-                callback.onFailure(t);
-            }
-        });
-    }
-
-
-    @Override
-    public void getCategories(NetworkDelegate callback) {
-
-        Call<CategoriesResponse> categories = apiService.getCategories();
-        categories.enqueue(new retrofit2.Callback<CategoriesResponse>() {
-            @Override
-            public void onResponse(@NonNull Call<CategoriesResponse> call, Response<CategoriesResponse> response) {
-                Log.i(TAG, "onResponse");
-                assert response.body() != null;
-                Log.i(TAG, String.valueOf(response.body().getCategories()));
-                if (response.isSuccessful() && response.body() != null) {
-                    callback.onSuccess(response.body().getCategories());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<CategoriesResponse> call, Throwable t) {
-                Log.i(TAG, "onFailure");
-                Log.e(TAG, t.getMessage());
-                t.printStackTrace();
-                callback.onFailure(t);
-            }
-        });
+    public Single<CategoriesResponse> getCategories() {
+        return apiService.getCategories();
     }
 
     @Override
-    public void getAreas(NetworkDelegate networkDelegate) {
-
-        Call<AreasResponse> areas = apiService.getMealsAreas("list");
-        areas.enqueue(new retrofit2.Callback<AreasResponse>() {
-            @Override
-            public void onResponse(@NonNull Call<AreasResponse> call, Response<AreasResponse> response) {
-                Log.i(TAG, "onResponse");
-                assert response.body() != null;
-                Log.i(TAG, String.valueOf(response.body().getAreas().toString()));
-                if (response.isSuccessful() && response.body() != null) {
-                    networkDelegate.onSuccess(response.body().getAreas());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<AreasResponse> call, Throwable t) {
-                Log.i(TAG, "onFailure");
-                Log.e(TAG, t.getMessage());
-                t.printStackTrace();
-                networkDelegate.onFailure(t);
-            }
-        });
+    public Single<AreasResponse> getAreas() {
+        return apiService.getAreas("list");
     }
 
     @Override
-    public void getIngredients(NetworkDelegate networkDelegate) {
-        Call<IngredientsResponse> ingredients = apiService.getMealsIngredients("list");
-        ingredients.enqueue(new retrofit2.Callback<IngredientsResponse>() {
-            @Override
-            public void onResponse(@NonNull Call<IngredientsResponse> call, Response<IngredientsResponse> response) {
-                Log.i(TAG, "onResponse");
-                if (response.isSuccessful() && response.body() != null) {
-                    Log.i(TAG, String.valueOf(response.body().getIngredients()));
-                    List<Ingredient> ingredients = response.body().getIngredients();
-                    if (ingredients != null && !ingredients.isEmpty()) { // Add a null check here
-                        networkDelegate.onSuccess(ingredients);
-                        Log.i(TAG, String.valueOf(ingredients.get(0).getName()));
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<IngredientsResponse> call, Throwable t) {
-                Log.i(TAG, "onFailure");
-                Log.e(TAG, t.getMessage());
-                t.printStackTrace();
-                networkDelegate.onFailure(t);
-            }
-        });
+    public Single<IngredientsResponse> getIngredients() {
+        return apiService.getIngredients("list");
     }
 
 

@@ -1,15 +1,18 @@
 package com.example.foodflow.search.ingredients.presenter;
 
-import com.example.foodflow.network.NetworkDelegate;
+import android.util.Log;
+
 import com.example.foodflow.repositories.RepositoryInterface;
 import com.example.foodflow.search.ingredients.view.IngredientsViewInterface;
 
-import java.util.List;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
-public class IngredientsPresenter implements IngredientsPresenterInterface, NetworkDelegate {
+public class IngredientsPresenter implements IngredientsPresenterInterface {
 
     private IngredientsViewInterface _view;
     private RepositoryInterface _repo;
+    private String TAG = "IngredientsPresenter";
 
     public IngredientsPresenter(IngredientsViewInterface view, RepositoryInterface repo) {
         _view = view;
@@ -18,16 +21,10 @@ public class IngredientsPresenter implements IngredientsPresenterInterface, Netw
 
     @Override
     public void getIngredients() {
-        _repo.getIngredients(this);
+        _repo.getIngredients().subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread()).subscribe(ingredientsResponse -> _view.displayIngredients(ingredientsResponse.getIngredients()),
+                        throwable -> Log.i(TAG, "Data Retrival Error: " + throwable.getMessage()));
     }
 
-    @Override
-    public void onSuccess(List items) {
-        _view.displayIngredients(items);
-    }
 
-    @Override
-    public void onFailure(Throwable t) {
-
-    }
 }

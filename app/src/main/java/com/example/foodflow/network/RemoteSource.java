@@ -1,24 +1,33 @@
 package com.example.foodflow.network;
 
+import com.example.foodflow.models.AreasResponse;
+import com.example.foodflow.models.CategoriesResponse;
+import com.example.foodflow.models.IngredientsResponse;
+import com.example.foodflow.models.MealsResponse;
+import com.example.foodflow.models.PlannerMealResponse;
+
+import io.reactivex.Single;
+
+
 public interface RemoteSource {
-    void getAllMeals(NetworkDelegate networkDelegate);
+    Single<MealsResponse> getMealOfTheDay();
 
-    void getMealOfTheDay(NetworkDelegate networkDelegate);
+    Single<PlannerMealResponse> getAllMeals();
 
-    void getMealDetails(NetworkDelegate networkDelegate, String mealId);
+    Single<MealsResponse> getMealDetails(String mealId);
 
-    void searchMeals(NetworkDelegate networkDelegate, String title);
+    Single<MealsResponse> searchMeals(String title);
 
-    void getMealsByCategories(NetworkDelegate networkDelegate, String category);
+    Single<MealsResponse> getMealsByCategory(String category);
 
-    void getMealsByArea(NetworkDelegate networkDelegate, String area);
+    Single<MealsResponse> getMealsByArea(String area);
 
-    void getMealsByIngredient(NetworkDelegate networkDelegate, String ingredient);
+    Single<MealsResponse> getMealsByIngredient(String ingredient);
 
-    void getCategories(NetworkDelegate networkDelegate);
+    Single<CategoriesResponse> getCategories();
 
-    void getAreas(NetworkDelegate networkDelegate);
+    Single<AreasResponse> getAreas();
 
-    void getIngredients(NetworkDelegate networkDelegate);
+    Single<IngredientsResponse> getIngredients();
 
 }

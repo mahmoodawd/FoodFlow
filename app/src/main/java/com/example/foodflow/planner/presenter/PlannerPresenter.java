@@ -1,5 +1,7 @@
 package com.example.foodflow.planner.presenter;
 
+import android.util.Log;
+
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
 
@@ -9,9 +11,13 @@ import com.example.foodflow.repositories.RepositoryInterface;
 
 import java.util.List;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
+
 public class PlannerPresenter implements PlannerPresenterInterface {
     RepositoryInterface _repo;
     PlannerViewInterface _view;
+    private String TAG = "PlannerPresenter";
 
     public PlannerPresenter(RepositoryInterface repo, PlannerViewInterface view) {
         this._repo = repo;
@@ -28,7 +34,9 @@ public class PlannerPresenter implements PlannerPresenterInterface {
     @Override
     public void getMealsOfTheWeek(LifecycleOwner lifecycleOwner) {
 
-        _repo.getCurrentWeekMeals().observe(lifecycleOwner, plannerMeals -> _view.displayMeals(plannerMeals));
+        _repo.getCurrentWeekMeals().subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread()).subscribe(plannerMeals -> _view.displayMeals(plannerMeals),
+                        throwable -> Log.i(TAG, "Data Retrival Error: " + throwable.getMessage()));
 
     }
 }

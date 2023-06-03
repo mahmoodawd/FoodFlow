@@ -12,13 +12,18 @@ import com.example.foodflow.models.Meal;
 
 import java.util.List;
 
+import io.reactivex.Observable;
+import io.reactivex.Single;
+
 
 @Dao
 public interface MealDoa {
 
     @Query("SELECT * FROM meal")
-    LiveData<List<Meal>> getStoredMeals();
+    Observable<List<Meal>> getStoredMeals();
 
+    @Query("SELECT * FROM meal WHERE ID = :mealID")
+    Single<List<Meal>> getMealDetails(String mealID);
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     void insertAll(Meal meals);

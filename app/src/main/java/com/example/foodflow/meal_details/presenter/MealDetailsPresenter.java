@@ -1,15 +1,19 @@
 package com.example.foodflow.meal_details.presenter;
 
+import android.util.Log;
+
 import com.example.foodflow.meal_details.view.MealDetailsViewInterface;
-import com.example.foodflow.models.Meal;
-import com.example.foodflow.network.NetworkDelegate;
 import com.example.foodflow.repositories.RepositoryInterface;
 
 import java.util.List;
 
-public class MealDetailsPresenter implements MealDetailsPresenterInterface, NetworkDelegate {
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
+
+public class MealDetailsPresenter implements MealDetailsPresenterInterface {
     RepositoryInterface _repo;
     MealDetailsViewInterface _view;
+    private String TAG = "MealDetailsPresenter";
 
     public MealDetailsPresenter(MealDetailsViewInterface _view, RepositoryInterface _repo) {
         this._repo = _repo;
@@ -18,16 +22,18 @@ public class MealDetailsPresenter implements MealDetailsPresenterInterface, Netw
 
     @Override
     public void getMealDetails(String mealID) {
-        _repo.getMealDetails(this, mealID);
+        _repo.getMealDetails(mealID)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(meals -> {
+                            Log.i(TAG, "getMealDetails: " + meals.size());
+                            _view.displayMealDetails(meals);
+
+                        },
+                        throwable -> Log.d(TAG, "getMealDetails: " + throwable.getMessage()));
+
+
     }
 
-    @Override
-    public void onSuccess(List mealList) {
-        _view.displayMealDetails(mealList);
-    }
 
-    @Override
-    public void onFailure(Throwable t) {
-
-    }
 }

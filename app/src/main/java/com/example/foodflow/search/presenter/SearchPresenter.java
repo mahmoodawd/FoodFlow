@@ -1,15 +1,18 @@
 package com.example.foodflow.search.presenter;
 
+import android.util.Log;
+
 import com.example.foodflow.models.Meal;
-import com.example.foodflow.network.NetworkDelegate;
 import com.example.foodflow.repositories.RepositoryInterface;
 import com.example.foodflow.search.view.SearchViewInterface;
 
-import java.util.List;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
-public class SearchPresenter implements SearchPresenterInterface, NetworkDelegate {
+public class SearchPresenter implements SearchPresenterInterface {
     private SearchViewInterface _view;
     private RepositoryInterface _repo;
+    private String TAG = "SearchPresenter";
 
     public SearchPresenter(SearchViewInterface view, RepositoryInterface repo) {
         this._view = view;
@@ -18,35 +21,10 @@ public class SearchPresenter implements SearchPresenterInterface, NetworkDelegat
 
 
     @Override
-    public void onSuccess(List items) {
-        _view.showSearchResult(items);
-
-    }
-
-
-    @Override
-    public void onFailure(Throwable t) {
-
-    }
-
-    @Override
-    public void getCategories() {
-        _repo.getCategories(this);
-    }
-
-    @Override
-    public void getAreas() {
-        _repo.getAreas(this);
-    }
-
-    @Override
-    public void getIngredients() {
-        _repo.getIngredients(this);
-    }
-
-    @Override
     public void searchMeal(String mealName) {
-        _repo.searchMeals(this, mealName);
+        _repo.searchMeal(mealName).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread()).subscribe(mealsResponse -> _view.showSearchResult(mealsResponse.getMeals()),
+                        throwable -> Log.i(TAG, "Data Retrival Error: " + throwable.getMessage()));
     }
 
     @Override

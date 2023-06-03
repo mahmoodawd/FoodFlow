@@ -26,6 +26,7 @@ public class MealDetailsFragment extends Fragment implements MealDetailsViewInte
     RecyclerView mealDetailsRecyclerView;
     MealDetailsAdapter mealsAdapter;
     MealDetailsPresenter mealDetailsPresenter;
+    private String TAG = "MealDetailsFragment";
 
     public MealDetailsFragment() {
         // Required empty public constructor
@@ -56,8 +57,7 @@ public class MealDetailsFragment extends Fragment implements MealDetailsViewInte
     public void displayMealDetails(List<Meal> mealList) {
         mealsAdapter.setMealsList(mealList);
         mealsAdapter.notifyDataSetChanged();
-        Toast.makeText(this.getContext(), mealList.get(0).getStrMeal(), Toast.LENGTH_SHORT).show();
-        Log.i("MDFrag", mealList.get(0).getStrMeasure1());
+        Log.i(TAG, "displayMealDetails:" + mealList.size());
 
     }
 

@@ -1,15 +1,20 @@
 package com.example.foodflow.search.areas.presenter;
 
-import com.example.foodflow.network.NetworkDelegate;
+import android.util.Log;
+
 import com.example.foodflow.repositories.RepositoryInterface;
 import com.example.foodflow.search.areas.view.AreasViewInterface;
 
 import java.util.List;
 
-public class AreasPresenter implements AreasPresenterInterface, NetworkDelegate {
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
+
+public class AreasPresenter implements AreasPresenterInterface{
 
     private AreasViewInterface _view;
     private RepositoryInterface _repo;
+    private String TAG = "AreasPresenter";
 
     public AreasPresenter(AreasViewInterface view, RepositoryInterface repo) {
         _view = view;
@@ -19,17 +24,9 @@ public class AreasPresenter implements AreasPresenterInterface, NetworkDelegate 
 
 
     @Override
-    public void onSuccess(List items) {
-        _view.displayAreas(items);
-    }
-
-    @Override
-    public void onFailure(Throwable t) {
-
-    }
-
-    @Override
     public void getAreas() {
-        _repo.getAreas(this);
+        _repo.getAreas().subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread()).subscribe(areasResponse -> _view.displayAreas(areasResponse.getAreas()),
+                        throwable -> Log.i(TAG, "Data Retrival Error: " + throwable.getMessage()));
     }
 }

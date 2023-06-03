@@ -62,7 +62,6 @@ public class FavoritesFragment extends Fragment implements MealsViewInterface, O
         mealsRecyclerView.setLayoutManager(layoutManager);
         mealsRecyclerView.setAdapter(mealsAdapter);
         mealsPresenter.getFavorites();
-        mealsPresenter.informView(this.getViewLifecycleOwner());
         return view;
     }
 
@@ -99,12 +98,13 @@ public class FavoritesFragment extends Fragment implements MealsViewInterface, O
     @Override
     public void deleteFromFavorites(Meal meal) {
         mealsPresenter.deleteMealFromFav(meal);
+        mealsAdapter.notifyDataSetChanged();
     }
 
 
     @Override
     public void onDelIconClick(Meal meal) {
         deleteFromFavorites(meal);
-        mealsAdapter.notifyDataSetChanged();
+
     }
 }

@@ -1,22 +1,16 @@
 package com.example.foodflow.core.presenter;
 
-import androidx.lifecycle.LifecycleOwner;
-import androidx.lifecycle.LiveData;
-
 import com.example.foodflow.models.Meal;
-
-import java.util.List;
 
 public interface MealsPresenterInterface {
 
     void getMealOfTheDay();
 
     void addMealToFav(Meal meal);
+
     void deleteMealFromFav(Meal meal);
 
-    LiveData<List<Meal>> getFavorites();
-
-    void informView(LifecycleOwner lifecycleOwner);
+    void getFavorites();
 
     void getMealsByCategory(String categoryTitle);
 

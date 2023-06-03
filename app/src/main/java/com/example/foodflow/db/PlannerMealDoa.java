@@ -13,15 +13,18 @@ import com.example.foodflow.models.PlannerMeal;
 
 import java.util.List;
 
+import io.reactivex.Observable;
+import io.reactivex.Single;
+
 
 @Dao
 public interface PlannerMealDoa {
 
     @Query(value = "SELECT * FROM plannermeal" )
-    LiveData<List<PlannerMeal>> getWeekMeals();
+    Observable<List<PlannerMeal>> getWeekMeals();
 
     @Query(value = "SELECT * FROM plannermeal WHERE  ID = :weekDay" )
-    LiveData<List<PlannerMeal>> getDayMeals(String weekDay);
+    Observable<List<PlannerMeal>> getDayMeals(String weekDay);
 
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

@@ -7,42 +7,45 @@ import com.example.foodflow.models.IngredientsResponse;
 import com.example.foodflow.models.MealsResponse;
 import com.example.foodflow.models.PlannerMealResponse;
 
-import retrofit2.Call;
+import io.reactivex.Single;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
 
 public interface API_Service {
 
 
+    @GET ("random.php")
+    Single<MealsResponse> getMealOfTheDay();
+
     @GET("search.php")
-    Call<PlannerMealResponse> getAllMeals(@Query("s") String meal);
+    Single<PlannerMealResponse> getAllMeals(@Query("s") String meal);
 
     @GET("random.php")
-    Call<MealsResponse> getRandomMeal();
+    Single<MealsResponse> getRandomMeal();
 
     @GET("search.php")
-    Call<MealsResponse> getSearchedMeals(@Query("s") String meal);
+    Single<MealsResponse> getSearchedMeals(@Query("s") String meal);
 
     @GET("lookup.php")
-    Call<MealsResponse> getMealDetails(@Query("i") String mealId);
+    Single<MealsResponse> getMealDetails(@Query("i") String mealId);
+
+    @GET("filter.php")
+    Single<MealsResponse> getMealsByCategory(@Query("c") String category);
+
+    @GET("filter.php")
+    Single<MealsResponse> getMealsByArea(@Query("a") String area);
+
+    @GET("filter.php")
+    Single<MealsResponse> getMealsByIngredient(@Query("i") String ingredient);
 
     @GET("categories.php")
-    Call<CategoriesResponse> getCategories();
-
-    @GET("filter.php")
-    Call<MealsResponse> getMealsByCategory(@Query("c") String category);
-
-    @GET("filter.php")
-    Call<MealsResponse> getMealsByArea(@Query("a") String area);
-
-    @GET("filter.php")
-    Call<MealsResponse> getMealsByIngredient(@Query("i") String ingredient);
+    Single<CategoriesResponse> getCategories();
 
     @GET("list.php")
-    Call<AreasResponse> getMealsAreas(@Query("a") String filter);
+    Single<AreasResponse> getAreas(@Query("a") String filter);
 
     @GET("list.php")
-    Call<IngredientsResponse> getMealsIngredients(@Query("i") String filter);
+    Single<IngredientsResponse> getIngredients(@Query("i") String filter);
 
 
 }

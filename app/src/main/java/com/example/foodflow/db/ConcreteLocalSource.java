@@ -9,11 +9,13 @@ import com.example.foodflow.models.PlannerMeal;
 
 import java.util.List;
 
+import io.reactivex.Observable;
+import io.reactivex.Single;
+
 public class ConcreteLocalSource implements LocalSource {
     private Context context;
     MealDoa mealDoa;
     PlannerMealDoa plannerMealDoa;
-    LiveData<List<Meal>> storedMeals;
     LiveData<List<PlannerMeal>> dayMeals;
     private static ConcreteLocalSource instance = null;
 
@@ -23,8 +25,6 @@ public class ConcreteLocalSource implements LocalSource {
         AppDB db = AppDB.getInstance(context.getApplicationContext());
         mealDoa = db.mealDao();
         plannerMealDoa = db.plannerMealDoa();
-        storedMeals = mealDoa.getStoredMeals();
-        dayMeals = plannerMealDoa.getWeekMeals();
 
 
 
@@ -38,60 +38,45 @@ public class ConcreteLocalSource implements LocalSource {
     }
 
     @Override
-    public LiveData<List<Meal>> getStoredMeals() {
-        return storedMeals;
+    public Observable<List<Meal>> getStoredMeals() {
+        return mealDoa.getStoredMeals();
+    }
+
+    @Override
+    public Single<List<Meal>> getMealDetails(String id) {
+        return mealDoa.getMealDetails(id);
     }
 
     @Override
     public void insert(Meal meal) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                mealDoa.insertAll(meal);
-            }
-        }).start();
+        new Thread(() -> mealDoa.insertAll(meal)).start();
     }
 
     @Override
     public void delete(Meal meal) {
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                mealDoa.delete(meal);
-            }
-        }).start();
+        new Thread(() -> mealDoa.delete(meal)).start();
     }
 
     @Override
-    public LiveData<List<PlannerMeal>> getWeekMeals() {
-        return dayMeals;
+    public Observable<List<PlannerMeal>> getWeekMeals() {
+        return plannerMealDoa.getWeekMeals();
     }
 
     @Override
-    public LiveData<List<PlannerMeal>> getMealsByDay(String weekDay) {
-        dayMeals = plannerMealDoa.getDayMeals(weekDay);
-        return dayMeals;
+    public Observable<List<PlannerMeal>> getMealsByDay(String weekDay) {
+        return  plannerMealDoa.getDayMeals(weekDay);
+
     }
 
     @Override
     public void plan(PlannerMeal meal) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                plannerMealDoa.insertAll(meal);
-            }
-        }).start();
+        new Thread(() -> plannerMealDoa.insertAll(meal)).start();
     }
 
     @Override
     public void unPlan(PlannerMeal meal) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                plannerMealDoa.delete(meal);
-            }
-        }).start();
+        new Thread(() -> plannerMealDoa.delete(meal)).start();
     }
 
 
