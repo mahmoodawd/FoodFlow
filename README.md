@@ -25,6 +25,7 @@ FoodFlow helps users plan their weekly meals by providing them with a list of me
 - Show a full detailed description about meal includes country, category, ingredients, instructions, and a tutorial video
 
 ## Screenshots
+![Mockup Screenshot](./foodFlow-ScreenShots.png)
 
 
 
