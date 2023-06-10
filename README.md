@@ -33,8 +33,10 @@ FoodFlow helps users plan their weekly meals by providing them with a list of me
 
 - MVP: For implementing the Model-View-Presenter architecture pattern
 - Repository Pattern: For separating data storage and access from the rest of the app
+- Singleton Pattern: To provides a global point of access to certain classes like db and api classes
 - Retrofit: For making HTTP requests and handling API responses from [www.themealdb.com](https://www.themealdb.com/api.php)
 - Room: For local data storage and access
+- SharedPrefs: For storing user credentials so provide auto login
 - RxJava: For reactive programming and asynchronous data flow
 - Navigation Component: For implementing navigation in the app
 - Firebase Authentication: For email and Google authentication
