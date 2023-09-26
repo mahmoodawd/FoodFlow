@@ -6,9 +6,9 @@
     android:layout_height="match_parent"
     android:paddingBottom="70dp">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
         tools:context=".search.view.SearchFragment">
 
@@ -20,10 +20,12 @@
 
         <androidx.appcompat.widget.SearchView
             android:id="@+id/searchView"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:hint="@string/searchbar_hint"
-            app:layout_anchor="@id/search_bar" />
+            app:layout_constraintEnd_toEndOf="@id/guidelineEnd"
+            app:layout_constraintStart_toStartOf="@id/guidelineStart"
+            app:layout_constraintTop_toTopOf="@id/guidelineTop" />
 
         <TextView
             android:id="@+id/searchResultTV"
@@ -33,13 +35,18 @@
             android:layout_margin="0dp"
             android:lineSpacingExtra="5sp"
             android:padding="10dp"
-            android:text="@string/searchResult" />
+            android:text="@string/searchResult"
+            app:layout_constraintStart_toStartOf="@id/guidelineStart"
+            app:layout_constraintTop_toBottomOf="@id/searchView" />
 
         <com.facebook.shimmer.ShimmerFrameLayout
             android:id="@+id/search_shimmer_view_container"
             android:layout_width="match_parent"
-            app:shimmer_auto_start="false"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="@id/guidelineEnd"
+            app:layout_constraintStart_toStartOf="@id/guidelineStart"
+            app:layout_constraintTop_toBottomOf="@id/searchResultTV"
+            app:shimmer_auto_start="false">
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/mealThumbPlaceHolder"
@@ -69,9 +76,12 @@
         </com.facebook.shimmer.ShimmerFrameLayout>
 
         <androidx.core.widget.NestedScrollView
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
-            app:layout_behavior="@string/searchbar_scrolling_view_behavior">
+            app:layout_behavior="@string/searchbar_scrolling_view_behavior"
+            app:layout_constraintEnd_toEndOf="@id/guidelineEnd"
+            app:layout_constraintStart_toStartOf="@id/guidelineStart"
+            app:layout_constraintTop_toBottomOf="@id/search_shimmer_view_container">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -87,7 +97,7 @@
                     android:layout_gravity="start"
                     android:layout_margin="10dp"
                     android:drawableEnd="@drawable/ic_navigate_next"
-                    android:padding="32dp"
+                    android:padding="8dp"
                     android:text="@string/searchByIngredient"
                     android:textAlignment="textStart" />
 
@@ -99,7 +109,7 @@
                     android:layout_gravity="start"
                     android:layout_margin="10dp"
                     android:drawableEnd="@drawable/ic_navigate_next"
-                    android:padding="32dp"
+                    android:padding="8dp"
                     android:text="@string/searchByArea"
                     android:textAlignment="textStart" />
 
@@ -111,7 +121,7 @@
                     android:layout_gravity="start"
                     android:layout_margin="10dp"
                     android:drawableEnd="@drawable/ic_navigate_next"
-                    android:padding="32dp"
+                    android:padding="8dp"
                     android:text="@string/searchByCategory"
                     android:textAlignment="textStart" />
 
@@ -119,7 +129,33 @@
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>
 
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineStart"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent=".05" />
 
-    </LinearLayout>
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineEnd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent=".95" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineTop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent=".05" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineBottom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent=".95" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </ScrollView>

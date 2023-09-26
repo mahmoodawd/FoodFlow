@@ -43,5 +43,7 @@
     <string name="welcome_back">Welcome Back</string>
     <string name="logout">LogOut</string>
     <string name="guestPrompt">Please Login to unlock this Feature</string>
+    <string name="meal">meal</string>
+    <string name="no_fav">No favorites</string>
 
 </resources>

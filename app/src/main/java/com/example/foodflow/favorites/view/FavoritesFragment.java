@@ -33,6 +33,7 @@ public class FavoritesFragment extends Fragment
     FavoritesMealsAdapter mealsAdapter;
     MealsPresenter mealsPresenter;
     View guestPrompt;
+    View noFavoritesView;
     Button navToLoginBtn;
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
@@ -67,6 +68,7 @@ public class FavoritesFragment extends Fragment
         mealsRecyclerView = view.findViewById(R.id.mealsRecyclerView);
         mealsRecyclerView.setVisibility(user != null ? View.VISIBLE : View.GONE);
         guestPrompt = view.findViewById(R.id.guestPromptView1);
+        noFavoritesView = view.findViewById(R.id.no_fav_view);
         navToLoginBtn = guestPrompt.findViewById(R.id.navToAuthBtn);
         guestPrompt.setVisibility(user == null ? View.VISIBLE : View.GONE);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this.getContext());
@@ -92,6 +94,7 @@ public class FavoritesFragment extends Fragment
 
     @Override
     public void displayMeals(List<Meal> mealList) {
+        noFavoritesView.setVisibility(mealList.isEmpty() ? View.VISIBLE : View.GONE);
         if (user != null) {
             mealsAdapter.setMealsList(mealList);
             mealsAdapter.notifyDataSetChanged();

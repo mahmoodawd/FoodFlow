@@ -2,17 +2,17 @@ package com.example.foodflow.search.ingredients.view;
 
 import android.content.Context;
 import android.os.Bundle;
-
-import androidx.appcompat.widget.SearchView;
-import androidx.fragment.app.Fragment;
-import androidx.navigation.Navigation;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.StaggeredGridLayoutManager;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ProgressBar;
+
+import androidx.appcompat.widget.SearchView;
+import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.foodflow.R;
 import com.example.foodflow.core.view.OnThumbnailClickListener;
@@ -33,6 +33,7 @@ public class IngredientsFragment extends Fragment implements IngredientsViewInte
     IngredientsPresenter ingredientsPresenter;
     List<Ingredient> newIngredientList;
     SearchView searchView;
+    ProgressBar loading_indicator;
 
 
     public IngredientsFragment() {
@@ -50,7 +51,7 @@ public class IngredientsFragment extends Fragment implements IngredientsViewInte
         View view = inflater.inflate(R.layout.fragment_ingredients, container, false);
         ingredientRecyclerView = view.findViewById(R.id.ingredientsRecyclerView);
         searchView = view.findViewById(R.id.ingredientSearchView);
-
+        loading_indicator = view.findViewById(R.id.loading_indicator);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -70,7 +71,7 @@ public class IngredientsFragment extends Fragment implements IngredientsViewInte
                 getInstance(this.getContext(), API_Client.getInstance(),
                         ConcreteLocalSource.getInstance(this.getContext())));
         newIngredientList = new ArrayList<>();
-        StaggeredGridLayoutManager ingredientLayoutManager = new StaggeredGridLayoutManager(3, RecyclerView.VERTICAL);
+        GridLayoutManager ingredientLayoutManager = new GridLayoutManager(requireContext(), 3);
         ingredientsAdapter = new IngredientsAdapter(this.getContext(), newIngredientList, this);
         ingredientRecyclerView.setHasFixedSize(true);
         ingredientRecyclerView.setLayoutManager(ingredientLayoutManager);
@@ -82,6 +83,7 @@ public class IngredientsFragment extends Fragment implements IngredientsViewInte
 
     @Override
     public void displayIngredients(List<Ingredient> ingredientList) {
+        loading_indicator.setVisibility(View.GONE);
         ingredientsAdapter.setIngredients(ingredientList);
         ingredientsAdapter.notifyDataSetChanged();
         newIngredientList = ingredientList;

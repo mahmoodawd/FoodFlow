@@ -36,6 +36,7 @@
         android:id="@+id/plannerMealsRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        tools:itemCount="1"
         tools:listitem="@layout/planner_meal_layout" />
 
 </LinearLayout>

@@ -1,16 +1,15 @@
 package com.example.foodflow.search.categories.view;
 
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-import androidx.navigation.Navigation;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.StaggeredGridLayoutManager;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
+
+import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import com.example.foodflow.R;
 import com.example.foodflow.core.view.OnThumbnailClickListener;
@@ -28,6 +27,7 @@ public class CategoriesFragment extends Fragment implements CategoriesViewInterf
     RecyclerView categoryRecyclerView;
     CategoriesAdapter categoriesAdapter;
     CategoriesPresenter categoriesPresenter;
+    ProgressBar loading_indicator;
 
     public CategoriesFragment() {
         // Required empty public constructor
@@ -44,7 +44,7 @@ public class CategoriesFragment extends Fragment implements CategoriesViewInterf
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_categories, container, false);
         categoryRecyclerView = view.findViewById(R.id.categoriesRecyclerView);
-
+        loading_indicator = view.findViewById(R.id.loading_indicator);
 
         categoriesPresenter = new CategoriesPresenter(this, Repository.
                 getInstance(this.getContext(), API_Client.getInstance(),
@@ -60,6 +60,7 @@ public class CategoriesFragment extends Fragment implements CategoriesViewInterf
 
     @Override
     public void displayCategories(List<Category> categoryList) {
+        loading_indicator.setVisibility(View.GONE);
         categoriesAdapter.setCategories(categoryList);
         categoriesAdapter.notifyDataSetChanged();
     }
