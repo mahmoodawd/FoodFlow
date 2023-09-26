@@ -59,8 +59,8 @@ public class HomeFragment extends Fragment implements MealsViewInterface, OnThum
         shimmerFrameLayout = view.findViewById(R.id.shimmer_view_container);
         placeHolder = view.findViewById(R.id.mealThumbPlaceHolder);
         mealsRecyclerView = view.findViewById(R.id.mealsRecyclerView);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this.getContext());
-        layoutManager.setOrientation(RecyclerView.HORIZONTAL);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+        layoutManager.setOrientation(RecyclerView.VERTICAL);
         mealsAdapter = new MealsAdapter(this.getContext(), new ArrayList<>(), this, this);
         mealsPresenter = new MealsPresenter(this, Repository
                 .getInstance(this.getContext(), API_Client.getInstance(), ConcreteLocalSource.getInstance(this.getContext())));

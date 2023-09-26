@@ -26,5 +26,4 @@ public interface LocalSource {
 
     void unPlan(PlannerMeal meal);
 
-
 }

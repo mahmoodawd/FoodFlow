@@ -114,7 +114,7 @@ public class MealDetailsAdapter extends RecyclerView.Adapter<MealDetailsAdapter.
 
         appendIngredient(ingredients);
         return Observable.fromArray(ingredients.stream()
-                .filter(ingredient -> !ingredient.isEmpty())
+                .filter(ingredient -> ingredient != null && !ingredient.isEmpty())
                 .collect(Collectors.toList()));
     }
 

@@ -17,12 +17,17 @@ public class Meal {
 
     @ColumnInfo(name = "TITLE")
     private String strMeal;
+
     @ColumnInfo(name = "AREA")
     private String strArea;
+
     @ColumnInfo(name = "THUMBNAIL")
     private String strMealThumb;
-    private String strImageSource;
 
+    @ColumnInfo(name = "USER_ID")
+    private String userID;
+
+    private String strImageSource;
     private String strIngredient10;
     private String strIngredient12;
     private String strIngredient11;
@@ -71,7 +76,6 @@ public class Meal {
     private String strMeasure17;
     private String strMeasure14;
     private String strMeasure15;
-
 
 
     public void setIdMeal(@NonNull String idMeal) {
@@ -512,7 +516,11 @@ public class Meal {
     }
 
 
+    public String getUserID() {
+        return userID;
+    }
 
-
-
+    public void setUserID(String userID) {
+        this.userID = userID;
+    }
 }

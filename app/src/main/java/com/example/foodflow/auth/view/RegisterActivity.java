@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -13,6 +14,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.example.foodflow.MainActivity;
 import com.example.foodflow.R;
@@ -58,11 +60,12 @@ public class RegisterActivity extends AppCompatActivity {
         confirmPassword = findViewById(R.id.confirmPasswordField);
         userName = findViewById(R.id.userNameField);
         navToLogin = findViewById(R.id.navToLoginTv);
-
+        setCustomToolbar();
         mAuth = FirebaseAuth.getInstance();
         requestGoogleSignIn();
 
         btnSignInWithGoogle.setOnClickListener(view -> signInWithGoogle());
+
         signUpBtn.setOnClickListener(v -> {
             if (areFieldsValid()) {
                 if (isPasswordsMatch()) {
@@ -80,6 +83,25 @@ public class RegisterActivity extends AppCompatActivity {
         navToLogin.setOnClickListener(v -> {
             navigate(LoginActivity.class);
         });
+    }
+
+    private void setCustomToolbar() {
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_arrow_back);
+        getSupportActionBar().setTitle("");
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     private boolean areFieldsValid() {

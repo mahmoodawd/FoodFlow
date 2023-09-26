@@ -69,7 +69,7 @@ public class MealsPresenter implements MealsPresenterInterface {
     public void getFavorites() {
         _repo.getFavoritesMeals().subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread()).subscribe(meals -> _view.displayMeals(meals),
-                        throwable -> Log.i(TAG, "Data Retrival Error: " + throwable.getMessage()));
+                        throwable  -> Log.i(TAG, "Data Retrival Error: " + throwable.getMessage()));
     }
 
 

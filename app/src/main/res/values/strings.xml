@@ -42,6 +42,6 @@
     <string name="username">Username</string>
     <string name="welcome_back">Welcome Back</string>
     <string name="logout">LogOut</string>
-    <string name="guestPrompt">Please Login to get Full Features</string>
+    <string name="guestPrompt">Please Login to unlock this Feature</string>
 
 </resources>

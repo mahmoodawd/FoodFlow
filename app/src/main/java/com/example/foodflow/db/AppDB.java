@@ -14,11 +14,14 @@ public abstract class AppDB extends RoomDatabase {
     private static AppDB instance = null;
 
     public abstract MealDoa mealDao();
-public abstract PlannerMealDoa plannerMealDoa();
+
+    public abstract PlannerMealDoa plannerMealDoa();
+
     public static synchronized AppDB getInstance(Context context) {
         if (instance == null) {
             instance = Room.databaseBuilder(context.getApplicationContext(),
-                    AppDB.class, "foodFlow-db").build();
+                    AppDB.class, "foodFlow-db")
+                    .build();
         }
 
         return instance;

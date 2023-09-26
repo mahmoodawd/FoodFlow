@@ -1,6 +1,11 @@
 package com.example.foodflow.planner.view;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
 
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
@@ -8,17 +13,13 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
-
 import com.example.foodflow.R;
+import com.example.foodflow.WelcomeActivity;
 import com.example.foodflow.core.view.OnThumbnailClickListener;
 import com.example.foodflow.db.ConcreteLocalSource;
 import com.example.foodflow.models.PlannerMeal;
-import com.example.foodflow.network.API_Client;
 import com.example.foodflow.models.WeekDay;
+import com.example.foodflow.network.API_Client;
 import com.example.foodflow.planner.presenter.PlannerPresenter;
 import com.example.foodflow.repositories.Repository;
 import com.google.firebase.auth.FirebaseAuth;
@@ -33,7 +34,8 @@ public class PlannerFragment extends Fragment implements PlannerViewInterface, O
 
     PlannerPresenter plannerPresenter;
     RecyclerView weekDaysRecyclerView;
-    TextView guestPrompt;
+    View guestPrompt;
+    Button navToAuthBtn;
     WeekDaysAdapter weekDaysAdapter;
     List<WeekDay> weekDays;
     List<PlannerMeal> saturdayMeals;
@@ -43,6 +45,7 @@ public class PlannerFragment extends Fragment implements PlannerViewInterface, O
     List<PlannerMeal> wednesdayMeals;
     List<PlannerMeal> thursdayMeals;
     List<PlannerMeal> fridayMeals;
+    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
     public PlannerFragment() {
         // Required empty public constructor
@@ -57,13 +60,27 @@ public class PlannerFragment extends Fragment implements PlannerViewInterface, O
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_planner, container, false);
-        weekDaysRecyclerView = view.findViewById(R.id.weekDaysRecyclerView);
-        guestPrompt = view.findViewById(R.id.guestPrompt);
         initDays();
         initWeekDays();
+        initUi(view);
 
+        navToAuthBtn.setOnClickListener(v -> {
+            Intent intent = new Intent(this.getContext(), WelcomeActivity.class);
+            startActivity(intent);
+        });
         plannerPresenter = new PlannerPresenter(Repository.getInstance(this.getContext(), API_Client.getInstance(), ConcreteLocalSource.getInstance(this.getContext())), this);
+        if (user != null) {
+            plannerPresenter.getMealsOfTheWeek(this.getViewLifecycleOwner());
+        }
+        return view;
+    }
 
+    private void initUi(View view) {
+        weekDaysRecyclerView = view.findViewById(R.id.weekDaysRecyclerView);
+        weekDaysRecyclerView.setVisibility(user != null ? View.VISIBLE : View.GONE);
+        guestPrompt = view.findViewById(R.id.guestPromptView);
+        guestPrompt.setVisibility(user == null ? View.VISIBLE : View.GONE);
+        navToAuthBtn = guestPrompt.findViewById(R.id.navToAuthBtn);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this.getContext());
         layoutManager.setOrientation(RecyclerView.VERTICAL);
         weekDaysAdapter = new WeekDaysAdapter(this.getContext(), weekDays, this, this, this);
@@ -72,8 +89,6 @@ public class PlannerFragment extends Fragment implements PlannerViewInterface, O
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(this.getContext(), DividerItemDecoration.VERTICAL);
         weekDaysRecyclerView.addItemDecoration(dividerItemDecoration);
         weekDaysRecyclerView.setAdapter(weekDaysAdapter);
-        plannerPresenter.getMealsOfTheWeek(this.getViewLifecycleOwner());
-        return view;
     }
 
     private void initDays() {
@@ -99,12 +114,8 @@ public class PlannerFragment extends Fragment implements PlannerViewInterface, O
 
     @Override
     public void displayMeals(List<PlannerMeal> plannerMeals) {
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
-        if (user == null) {
-            guestPrompt.setVisibility(View.VISIBLE);
-        } else {
-
+        if (user != null) {
             clearLists();
             for (PlannerMeal meal : plannerMeals) {
                 String weekDay = meal.getWeekDay();

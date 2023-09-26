@@ -1,7 +1,6 @@
 package com.example.foodflow.db;
 
 
-import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
@@ -19,11 +18,13 @@ import io.reactivex.Single;
 @Dao
 public interface MealDoa {
 
-    @Query("SELECT * FROM meal")
-    Observable<List<Meal>> getStoredMeals();
+    @Query("SELECT * FROM meal WHERE USER_ID = :userID")
+    Observable<List<Meal>> getStoredMeals(String userID);
 
     @Query("SELECT * FROM meal WHERE ID = :mealID")
     Single<List<Meal>> getMealDetails(String mealID);
+
+
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     void insertAll(Meal meals);
